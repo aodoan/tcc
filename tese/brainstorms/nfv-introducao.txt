@@ -1,8 +1,11 @@
+0) Pequena introducao:
+Cada vez mais, a quantidade de dados vem aumentando por parte dos usuários [colocar dados], provedores de infraestrutura de telecomunicações devem investir em equipamentos
+para acompanhar essa alta demanda, o que leva a um grande custo operacional [ colocar dados aqui de quanto pode economizar ]
+
 1) explicar o que é:
 																														  -- achar um termo melhor --
 A ideia central é transferir funções de rede (NF) (exemplos aqui) de hardwares proprietários para serem virtualizadas (VNF) como softwares que podem ser
 rodados em COTS (servers de proposito geral, datacenters, ambientes em nuvem).
-
 
 A "softwareização" da rede proporciona:
 --->
@@ -17,6 +20,10 @@ A "softwareização" da rede proporciona:
 	
 	2) Também tem a capacidade de reduzir custos operacionais (OPEX), provendo uma grande flexibilidade no deploy das funções, além de uma facilidade
 	maior com testes e migrações de tecnologias.
+  -> Do Bondan: "customers demand can be individually consireden and dynamically adjusted trough a chain of NFV, called Service Function Chain"
+  - A mesma infraestrutura pode oferecer diversos serviços dependendo dos usuários, ao encadear VNF's, teremos fluxos de execução. Isto é chamado de 
+  SFC (ou NFV-Forwading graph, como é chamado no ETSI)
+
 
 3) drawbacks
 	1) performance
