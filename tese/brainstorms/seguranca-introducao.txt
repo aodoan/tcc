@@ -44,6 +44,16 @@ Outro autores também considream Autenticidade e Não-Repudio
   - Falar sobre ML + IDS
 
 
-  
+2) Seguranca em NFV 
+
+
+  (0) Incetivar o pq é importante
+    NFV é um passo importante na evolução das redes, dado seus diversos benefícios. Porém, ao migrarmos nossa tecnologia, problemas surgirão,
+    dentre eles: segurança, performance, disponibilidade e entre outros.
+    
+    Uma outra questão importante é que serão introduzidos novas tecnologias com a adoção da NFV, trazendo mais espaço para vulnerabilidades.
+    Além da "softwarização" das funções de rede, hypervisores e a própria infraesturua da NFV (MANO)  são pontos críticos para a rede.
+    
+  (1) Falar sobre o módulo de Seguraça proposto ??
 
 
