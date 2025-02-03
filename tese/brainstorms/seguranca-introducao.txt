@@ -41,7 +41,7 @@ Outro autores também considream Autenticidade e Não-Repudio
       não precisam ser mantidos em um banco de dados. (Essa criação de perfil pode variar de rede para rede, e para o atacante, fica dificil etc). As principais desvantagem
       são: o sistema precisa ir por um periodo de "treinamento", onde é criado o perfil da rede, e dependendo dos parametros, uma grande taxa de erro pode acontecer
 
-
+  - Falar sobre ML + IDS
 
 
   
