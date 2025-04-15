@@ -13,11 +13,11 @@ class sfc():
     def __init__(self, instances : dict):
         # Start VNFs pointed by instances
         print(instances)
-        self.vnfs = []
+        vnf_list = []
         for i in instances:
-            self.vnfs.append(self.start_vnf(i.vnf_id, i.queue_in, i.queue_out))
-
-
+            vnf_list.append((i.vnf_id, self.start_vnf(i.vnf_id, i.queue_in, i.queue_out)))
+        self.vnfs = dict(vnf_list)
+        
     def start_vnf(self, vnf_id, queue_in, queue_out):
         """ Starts a single VNF
             @param vnf_id: A random five letter id given by NFVO
@@ -27,4 +27,11 @@ class sfc():
         """
         return vnf(vnf_id, queue_in, queue_out)
 
+    def get_vnf(self, vnf_id):
+        """Return the VNF descriptor given a vnf_id
+            @param vnf_id: Unique identifier of VNFs
+        """
+        return self.vnfs.get(vnf_id)
+
+        
 
