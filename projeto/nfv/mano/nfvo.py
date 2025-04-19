@@ -3,7 +3,11 @@ NFVO is responsible for:
 1 - Resource orchestration to multiple VIMs
 2 - Lifecycle management of SFCs
 
-(the resource part is abstracted)
+1 - The orchestration of NFVI resources across multiple VIMs, 
+fulfilling the Resource Orchestration functions 
+(Not considered in this project)
+
+2 - The lifecycle management of Network Services
 """
 import os
 import nfv

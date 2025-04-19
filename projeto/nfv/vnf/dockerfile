@@ -1,0 +1,13 @@
+FROM python:latest
+LABEL Maintainer="hal"
+
+WORKDIR /usr/app/src
+# To add the remote file at root directory in the container
+COPY test.py ./
+
+# Install necessary libs
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+
+CMD [ "python", "./test.py"]
