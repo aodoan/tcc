@@ -3,7 +3,7 @@ import pika as pk
 from config import RABBITMQ_SERVER, VNF_CONTROL_EXCHANGE
 
 class VNF():
-    def __init__(self, vnf_id, sfc_id, queue_in, queue_out, network_function):
+    def __init__(self, vnf_id, sfc_id, queue_in, queue_out, network_function, create_queue = False):
         """Generic body of a VNF
             @param vnf_id: Given random identifier
             @param network_function: Implementation of a Network Function"""
@@ -20,6 +20,11 @@ class VNF():
         # Use RabbitMQ to communicate with VNFs
         self.connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
         self.channel = self.connection.channel()
+
+        if create_queue is True:
+            logging.warning("create_queue is active! This could lead to bugs.")
+            self.channel.queue_declare(queue=queue_in)
+            self.channel.queue_declare(queue=queue_out)
 
         self.queue_in = queue_in 
         self.queue_out = queue_out
@@ -47,7 +52,8 @@ class VNF():
         """Function used to receive messages"""
         if body is None:
             return
-        logging.debug("Received %s", body.decode())
+        logging.info("Received %s", body.decode())
+        print("Received %s", body.decode())
 
         try:
             return_val = self.network_function(body.decode())
@@ -85,10 +91,16 @@ class VNF():
 
     def start_service(self):
         try:
-            logging.info("Starting service")
+            logging.info("Starting service fr!")
             self.channel.start_consuming()
         except KeyboardInterrupt:
-            self.channel.stop_consuming()
-            self.cleanup_vnf()
-            logging.info("Finishing service")
+            # self.channel.stop_consuming()
+            # self.cleanup_vnf()
+            # logging.info("Finishing service")
+            self.stop_service()
+    
+    def stop_service(self):
+        self.channel.stop_consuming()
+        self.cleanup_vnf()
+        logging.info("Finishing service")
 

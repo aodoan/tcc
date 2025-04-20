@@ -55,9 +55,15 @@ class VNFM():
             id = self.generate_id()
             vnfs.append(VNFDescriptor(id,
                                       queue_in=queues[i],
-                                      queue_out=queues[(i+1) % n]))
-        _sfc = SFC(vnfs)
+                                      queue_out=queues[i+1]))
+        _sfc = SFC(vnfs, queues, channel=self.channel)
         self.sfc_list.append((sfc_id, _sfc))
+        # Now, instantiate each VNF
+        for vnf in vnfs:
+            cont = self.container_manager.start_container(f"python ./instance.py {vnf.vnf_id} {sfc_id} {vnf.queue_in} {vnf.queue_out}", vnf_id=vnf.vnf_id)
+            cont.start()
+        return _sfc
+
     
     def cleanup_sfc(self, sfc_id):
         for idx, (stored_id, sfc) in enumerate(self.sfc_list):
@@ -80,11 +86,18 @@ class VNFM():
         logging.error("Could not generate a unique ID")
         return None
     
+# Example 
 connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
 channel = connection.channel()
 vnfm = VNFM(channel=channel)
 
-vnfm.instantiate_sfc("sfc-5", [], 5)
-time.sleep(1000)
+sfc = vnfm.instantiate_sfc("sfc-5", [], 3)
+qin, qout = sfc.endpoints()
+print(f"Queue in: {qin}, queue out: {qout}")
+while True:
+    inp = input("Digite q para sair")
+    if inp == "q":
+        break
+
 vnfm.cleanup_sfc("sfc-5")
 

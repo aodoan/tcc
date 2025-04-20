@@ -1,9 +1,10 @@
 """
 Code running inside a container
 
-python3 instance.py [VNF_ID] [QUEUE_IN] [QUEUE_OUT]
+python3 instance.py [VNF_ID] [SFC_ID] [QUEUE_IN] [QUEUE_OUT]
 """
 import sys
+import signal
 import logging
 from vnf import VNF
 
@@ -24,12 +25,23 @@ try:
     q_in = sys.argv[3]
     q_out = sys.argv[4]
 except:
-    print("Incorrect usage")
+    print("Incorrect usage!")
+    print("python ./instance.py VNF_ID SFC_ID QUEUE_IN QUEUE_OUT")
+
+logging.info("QUEUES: %s %s", q_in, q_out)
 
 def nf(input):
     return f"{input} -> {vnf_id}"
 
-vnf = VNF(vnf_id, sfc_id, q_in, q_out, nf)
+
+vnf = VNF(vnf_id, sfc_id, q_in, q_out, nf, create_queue=False)
+def handle_sigterm():
+    logging.info("Received SIGTERM")
+    vnf.stop_service()
+# Register SIGTERM to end process
+signal.signal(signal.SIGTERM, handle_sigterm)
+
+
 print("INPUT QUEUE: " + vnf.get_queue_in())
 print("OUTPUT QUEUE: " + vnf.get_queue_out())
 vnf.start_service()
