@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from typing import Optional
 from sfc.sfc import SFC
 from vnf.vnf import VNF
-from mano.container_manager import ContainerManager
+from mano.vim import VIM
 from config import RABBITMQ_SERVER
 import time
 @dataclass
@@ -30,11 +30,10 @@ class VNFM():
     def __init__(self, channel):
         """Init VNFM
             @param channel: RabbitMQ channel connection"""
-        print("vnfm started")
         self.__vnf_id = [] # Store all the current instantiated VNFs identifier
         self.sfc_list = []
         self.channel = channel
-        self.container_manager = ContainerManager()
+        self.vim = VIM()
         
     def instantiate_sfc(self, sfc_id, types, n):
         """ Creates a SFC
@@ -44,6 +43,7 @@ class VNFM():
         # TODO: check if types are ok etc
         vnfs = []
         queues = []
+
         # First, generate n+1 queues
         for i in range(n + 1):
             # for each VNF, generate two queues
@@ -56,22 +56,21 @@ class VNFM():
             vnfs.append(VNFDescriptor(id,
                                       queue_in=queues[i],
                                       queue_out=queues[i+1]))
+
         _sfc = SFC(vnfs, queues, channel=self.channel)
         self.sfc_list.append((sfc_id, _sfc))
         # Now, instantiate each VNF
         for vnf in vnfs:
-            cont = self.container_manager.start_container(f"python ./instance.py {vnf.vnf_id} {sfc_id} {vnf.queue_in} {vnf.queue_out}", vnf_id=vnf.vnf_id)
+            cont = self.vim.start_container(f"python ./instance.py {vnf.vnf_id} {sfc_id} {vnf.queue_in} {vnf.queue_out}", vnf_id=vnf.vnf_id)
             cont.start()
         return _sfc
 
-    
     def cleanup_sfc(self, sfc_id):
         for idx, (stored_id, sfc) in enumerate(self.sfc_list):
             if stored_id == sfc_id:
                 sfc.clean_sfc()
-                ids = sfc.get_instances()
-                print(f"IDS deleted: {ids}")
-                break  
+                self.sfc_list.remove(sfc)
+                break
 
     def generate_id(self, prefix="vnf-", length=6, max_attempts=20):
         """ Generate a random id and add to vnf_id list
