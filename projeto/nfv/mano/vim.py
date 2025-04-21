@@ -7,9 +7,9 @@ and managing the NFVI compute, storage and network resources
 import docker # type: ignore
 import logging
 import json
+import pika as pk
 from config import DOCKERFILE_DIR, IMAGE_NAME, VIM_EXCHANGE, RABBITMQ_SERVER
 from config import net
-import pika as pk
 
 logging.basicConfig(
     level=logging.INFO,
@@ -19,10 +19,11 @@ logging.basicConfig(
 
 class VIM:
     def __init__(self):
+        """Start all services and internal structures"""
         self.connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
         self.channel = self.connection.channel()
 
-        # Start to listen to exchange
+        # Start to listen to exchange for commands 
         self.channel.exchange_declare(exchange=VIM_EXCHANGE,
                                       exchange_type='fanout')
         result = self.channel.queue_declare(queue="", exclusive=True)
@@ -36,23 +37,26 @@ class VIM:
         self.client = docker.from_env()
         self.image = IMAGE_NAME
         self.running_containers = []
-        self.channel.start_consuming()
-        # image, build_logs = self.client.images.build(
-            # path=DOCKERFILE_DIR, # Assumes Dockerfile is in current directory
-            # tag=IMAGE_NAME,    # Image name
-            # rm=True
-        # )
+        self.start_service()
 
-    
+    def start_service(self):
+        """Start consuming all incoming messages"""
+        try:
+            self.channel.start_consuming()
+        except KeyboardInterrupt:
+            logging.info("Received Interruption, turning off all VNFs...")
+            self.kill_all()
+
     def treat_vim(self, ch, method, properties, body):
-        print(f"Received command! {body.decode()}")
-        # parse msg to json
+        """Respond to commands receveid in VIM_EXCHANGE"""
+        # Parse msg to json
         msg = None
         try:
             msg = json.loads(body.decode())
         except:
             logging.error("Could not parse message.")
             return
+
         action = msg["action"]
         if action == "start":
             cmd = f"python instance.py {msg["vnf_id"]} {msg["sfc_id"]} {msg["qin"]} {msg["qout"]}"
@@ -60,7 +64,6 @@ class VIM:
             self.start_container(cmd, vnf_id=msg["vnf_id"])
         elif action == "stop":
             self.stop_container(msg["vnf_id"])
-            #self.cleanup_container()
 
     def start_container(self, cmd, vnf_id=""):
         """ Start the container
@@ -110,8 +113,9 @@ class VIM:
             logging.warning(f"Could not remove container: {e}")
     
     def kill_all(self):
-        for container in self.running_containers:
-            container.stop()
+        for (vnf_id, container) in self.running_containers:
+            logging.info("Stopping VNF: %s", vnf_id)
+            container.kill()
 
 a = VIM()
 # a = VIM()

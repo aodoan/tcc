@@ -43,6 +43,7 @@ class VNFM():
         # Start to listen to exchange
         self.channel.exchange_declare(exchange=VNFM_EXCHANGE,
                                       exchange_type='fanout')
+
         result = self.channel.queue_declare(queue="", exclusive=True)
         queue_name = result.method.queue
         self.channel.queue_bind(queue=queue_name, exchange=VNFM_EXCHANGE)
@@ -68,22 +69,22 @@ class VNFM():
             return
 
         action = msg["action"]
-        if action == "create_node":
+        if action == "create_sfc":
             self.instantiate_sfc(sfc_id=msg["sfc_id"],
                                  types=[],
                                  n=msg["sfc_size"])
-        elif action == "delete_node":
+        elif action == "delete_sfc":
             self.cleanup_sfc(sfc_id=msg["sfc_id"])
+        elif action == "list_sfc":
+            self.list_sfc(msg["return_queue"])
         else:
             logging.info("Unknown message type!")
-
-
 
     def instantiate_sfc(self, sfc_id, types, n):
         """ Creates a SFC
             @param sfc_id: Unique SFC identifier
-            @param types: Specify each VNF
-            @param n: Number of VNFs instantiate"""
+            @param types: Specify each VNF type
+            @param n: Number of VNFs"""
         # TODO: check if types are ok etc
         vnfs = []
         queues = []
@@ -114,11 +115,9 @@ class VNFM():
             }
             self.channel.basic_publish(exchange=VIM_EXCHANGE, body=json.dumps(message), routing_key="")
 
-        logging.info("SFC created by VNFM. Endpoints %s %s",
-                     queues[0], queues[-1])
-        # for vnf in vnfs:
-            # cont = self.vim.start_container(f"python ./instance.py {vnf.vnf_id} {sfc_id} {vnf.queue_in} {vnf.queue_out}", vnf_id=vnf.vnf_id)
-            # cont.start()
+        logging.info("SFC (%s) created by VNFM. Endpoints %s %s",
+                     sfc_id, queues[0], queues[-1])
+
         return _sfc
 
     def cleanup_sfc(self, sfc_id):
@@ -141,7 +140,21 @@ class VNFM():
                 del self.sfc_list[idx]
                 break
     
+    def list_sfc(self, ret_queue):
+        sfcs = {}
+        for (sfc_id, sfc) in self.sfc_list:
+            vnf_dict = {}
+            for vnf in sfc.vnfs:
+                vnf_dict[vnf.vnf_id] = {
+                    "queue_in": vnf.queue_in,
+                    "queue_out": vnf.queue_out
+                }
+            sfcs[sfc_id] = {"sfc": vnf_dict}
 
+        print(json.dumps(sfcs, indent=4))
+        self.channel.basic_publish(exchange="", routing_key=ret_queue,
+                                   body=json.dumps(sfcs, indent=4))
+        return sfcs
     
     def generate_id(self, prefix="vnf-", length=6, max_attempts=20):
         """ Generate a random id and add to vnf_id list
