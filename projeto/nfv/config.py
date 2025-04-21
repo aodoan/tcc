@@ -3,10 +3,14 @@
 # RabbitMQ server IP
 RABBITMQ_SERVER = "172.17.0.1"
 
+# List of exchanges used to communicate
 # Exchange used by all VNFs to receive commands from MANO, NFVO, etc
 VNF_CONTROL_EXCHANGE = "vnf-control"
 
-#
+VIM_EXCHANGE = "vim-exchange"
+NFVO_EXCHANGE = "nfvo-exchange"
+VNFM_EXCHANGE = "vnfm-exchange"
+
 DOCKERFILE_PATH = "/home/hal/Desktop/tcc/projeto/nfv/vnf/dockerfile"
 DOCKERFILE_DIR = "/".join([part for part
                            in DOCKERFILE_PATH.split("/")[:-1]])

@@ -6,9 +6,10 @@ and managing the NFVI compute, storage and network resources
 """
 import docker # type: ignore
 import logging
-from config import DOCKERFILE_DIR, IMAGE_NAME
+import json
+from config import DOCKERFILE_DIR, IMAGE_NAME, VIM_EXCHANGE, RABBITMQ_SERVER
 from config import net
-
+import pika as pk
 
 logging.basicConfig(
     level=logging.INFO,
@@ -18,14 +19,48 @@ logging.basicConfig(
 
 class VIM:
     def __init__(self):
+        self.connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
+        self.channel = self.connection.channel()
+
+        # Start to listen to exchange
+        self.channel.exchange_declare(exchange=VIM_EXCHANGE,
+                                      exchange_type='fanout')
+        result = self.channel.queue_declare(queue="", exclusive=True)
+        queue_name = result.method.queue
+        self.channel.queue_bind(queue=queue_name, exchange=VIM_EXCHANGE)
+        self.channel.basic_consume(queue=queue_name,
+                                   on_message_callback=self.treat_vim,
+                                   auto_ack=True)
+
+        logging.info("Listening to controls in %s", queue_name)
         self.client = docker.from_env()
         self.image = IMAGE_NAME
         self.running_containers = []
+        self.channel.start_consuming()
         # image, build_logs = self.client.images.build(
             # path=DOCKERFILE_DIR, # Assumes Dockerfile is in current directory
             # tag=IMAGE_NAME,    # Image name
             # rm=True
         # )
+
+    
+    def treat_vim(self, ch, method, properties, body):
+        print(f"Received command! {body.decode()}")
+        # parse msg to json
+        msg = None
+        try:
+            msg = json.loads(body.decode())
+        except:
+            logging.error("Could not parse message.")
+            return
+        action = msg["action"]
+        if action == "start":
+            cmd = f"python instance.py {msg["vnf_id"]} {msg["sfc_id"]} {msg["qin"]} {msg["qout"]}"
+            print(msg["vnf_id"])
+            self.start_container(cmd, vnf_id=msg["vnf_id"])
+        elif action == "stop":
+            self.stop_container(msg["vnf_id"])
+            #self.cleanup_container()
 
     def start_container(self, cmd, vnf_id=""):
         """ Start the container
@@ -48,6 +83,20 @@ class VIM:
         except docker.errors.APIError as e:
             logging.error(f"Failed to start container: {e}")
             return None
+        
+    def stop_container(self, vnf_id):
+        for idx, (stored_id, container) in enumerate(self.running_containers):
+            if stored_id == vnf_id:
+                try:
+                    container.stop()  # Docker SDK: stop the container
+                    del self.running_containers[idx]
+                    logging.info("Container for VNF %s stopped and removed from the list.", vnf_id)
+                except Exception as e:
+                    logging.error("Error stopping container for VNF %s: %s", vnf_id, e)
+                break
+        else:
+            logging.error("No container found for VNF %s", vnf_id)
+
 
     def run_command(self, vnf_id):
         """Run a command in the VNF container"""
@@ -64,7 +113,7 @@ class VIM:
         for container in self.running_containers:
             container.stop()
 
-
+a = VIM()
 # a = VIM()
 # cont = a.start_container("python ./instance.py vnf-16 sfc-10 qin qout")
 # try:
