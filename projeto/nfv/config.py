@@ -10,6 +10,7 @@ VNF_CONTROL_EXCHANGE = "vnf-control"
 VIM_EXCHANGE = "vim-exchange"
 NFVO_EXCHANGE = "nfvo-exchange"
 VNFM_EXCHANGE = "vnfm-exchange"
+GATEWAY_EXCHANGE = "nfv-gateway-exchange"
 
 NFVIN_EXCHANGE = "nfv-in-exchange"
 IDS_EXCHANGE = "ids-exchange"
@@ -19,6 +20,7 @@ DOCKERFILE_DIR = "/".join([part for part
                            in DOCKERFILE_PATH.split("/")[:-1]])
 
 IMAGE_NAME = "nfv-instance"
+GATEWAY_PORT = 34002
 
 class NetConfig:
     network_name = "nfv-comm-network"

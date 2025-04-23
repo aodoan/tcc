@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from typing import Optional
 from sfc.sfc import SFC
 from vnf.vnf import VNF
-from config import RABBITMQ_SERVER, VNFM_EXCHANGE, VIM_EXCHANGE
+from config import RABBITMQ_SERVER, VNFM_EXCHANGE, VIM_EXCHANGE, GATEWAY_EXCHANGE
 import json
 import time
 
@@ -114,6 +114,19 @@ class VNFM():
                 "qout": vnf.queue_out
             }
             self.channel.basic_publish(exchange=VIM_EXCHANGE, body=json.dumps(message), routing_key="")
+        
+        # Upon creating a SFC, send message to Gateway
+        msg = {
+            "action" : "sfc-creation",
+            "sfc_id" : sfc_id,
+            "sfc" : {
+                "queue_in" : queues[0],
+                "queue_out": queues[-1]
+            }
+        }
+        self.channel.basic_publish(exchange=GATEWAY_EXCHANGE,
+                                   body=json.dumps(msg),
+                                   routing_key="")
 
         logging.info("SFC (%s) created by VNFM. Endpoints %s %s",
                      sfc_id, queues[0], queues[-1])
@@ -139,6 +152,13 @@ class VNFM():
                     self.channel.queue_delete(queue)
                 del self.sfc_list[idx]
                 break
+        msg = {
+            "action" : "sfc-delete",
+            "sfc_id" : sfc_id,
+        }
+        self.channel.basic_publish(exchange=GATEWAY_EXCHANGE,
+                                   body=json.dumps(msg),
+                                   routing_key="")
     
     def list_sfc(self, ret_queue):
         sfcs = {}
