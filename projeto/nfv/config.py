@@ -11,6 +11,9 @@ VIM_EXCHANGE = "vim-exchange"
 NFVO_EXCHANGE = "nfvo-exchange"
 VNFM_EXCHANGE = "vnfm-exchange"
 
+NFVIN_EXCHANGE = "nfv-in-exchange"
+IDS_EXCHANGE = "ids-exchange"
+
 DOCKERFILE_PATH = "/home/hal/Desktop/tcc/projeto/nfv/vnf/dockerfile"
 DOCKERFILE_DIR = "/".join([part for part
                            in DOCKERFILE_PATH.split("/")[:-1]])
