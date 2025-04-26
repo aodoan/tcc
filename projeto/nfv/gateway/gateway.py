@@ -91,7 +91,9 @@ class Gateway:
 
 
     def handle_client(self, client_socket, addr):
-        internal_channel = rabbit_connect()
+        # RabbitMQ support one connection per thread
+        # Create internal channel just for publishing messages
+        internal_channel = rabbit_connect() 
         with client_socket:
             while True:
                 try:
