@@ -6,8 +6,11 @@ import logging
 import os
 import sys
 import json
+import threading
+import time
 import pika as pk
 from config import RABBITMQ_SERVER, NFVIN_EXCHANGE, IDS_EXCHANGE
+from ids.oad import OAD
 
 logging.basicConfig(
     level=logging.INFO,
@@ -35,46 +38,27 @@ class IDS:
 
         Alarm: Is responsible of notify OAD of intrusions detected by Processing module
     """
-    def __init__(self):
+    def __init__(self, driver):
         """Initialize necessary structures and setup RabbitMQ communication"""
-        self.connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
-        self.channel = self.connection.channel()
-
-        # 1 - Set up sniffer
-        self.channel.exchange_declare(exchange=NFVIN_EXCHANGE,
-                                      exchange_type='fanout')
-        result = self.channel.queue_declare(queue="", exclusive=True)
-        sniff_queue = result.method.queue
-        self.channel.queue_bind(queue=sniff_queue, exchange=NFVIN_EXCHANGE)
-        self.channel.basic_consume(queue=sniff_queue,
-                                   on_message_callback=self.__sniff,
-                                   auto_ack=True)
-
-        # 2 - Set up OAD (IDS interface)
-        self.channel.exchange_declare(exchange=IDS_EXCHANGE,
-                                      exchange_type='fanout')
-        result = self.channel.queue_declare(queue="", exclusive=True)
-        oad_queue = result.method.queue
-        self.channel.queue_bind(queue=oad_queue, exchange=IDS_EXCHANGE)
-        self.channel.basic_consume(queue=oad_queue,
-                                   on_message_callback=self.__sniff,
-                                   auto_ack=True)
-
-
-    def __sniff(self, ch, method, properties, body):
-        logging.info("Sniffed: %s", body.decode())
-        # Upon sniffing a message, tries to convert to json
-        self.oad_sniff(body.decode())
-
-        # Store information
-        # Call process_data
+        self.driver = driver
 
     def start_monitoring(self):
-        self.channel.start_consuming()
+        # First, create a thread to receive messages
+        get_packets_thread = threading.Thread(target=self.__get_packets)
+        get_packets_thread.daemon = True
+        get_packets_thread.start()
+        
+        # Call start_driver (blocking)
+        self.driver.start_driver()
 
-    def oad_sniff(self, packet):
+    def __get_packets(self):
+        while True:
+            packet = self.driver.get_packet()
+            if packet:
+                self.process(packet)
+            else:
+                time.sleep(0.01)
 
-        pass
 
     def store_data(self):
         """ Store a data obtained from the OAD for future referecing
@@ -84,17 +68,19 @@ class IDS:
     def alarm(self):
         """ Notify OAD that an Intrusion ocurred
         """
+        self.driver.send_message("ATTACK!!!")
         pass
 
     def process(self, package):
         """ Process a package and determine wheter or not is an intrusion
         """
+        logging.info("[IDS] -> GOT A PACKET! %s", package)
         pass
 
     def configuration(self):
         """Handle internal configuration"""
         pass
 
-
-ids = IDS()
+driver = OAD() 
+ids = IDS(driver)
 ids.start_monitoring()

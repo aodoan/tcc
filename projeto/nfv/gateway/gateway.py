@@ -106,9 +106,11 @@ class Gateway:
                     if sfc_id is not None:
                         print(self.sfc_catalog[sfc_id])
                         queue_in = self.sfc_catalog[sfc_id]["queue_in"]
+
                         # Forward data to SFC
-                        # self.channel.basic_publish(exchange="", routing_key=queue_in,
-                                                   # body=data)
+                        internal_channel.basic_publish(exchange="", routing_key=queue_in,
+                                                       body=data)
+
                         # Forward data to Sniffer
                         internal_channel.basic_publish(exchange=NFVIN_EXCHANGE, routing_key="",
                                                    body=data)
