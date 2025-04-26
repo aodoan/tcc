@@ -70,7 +70,7 @@ class IDS:
         # Call process_data
 
     def start_monitoring(self):
-        pass
+        self.channel.start_consuming()
 
     def oad_sniff(self, packet):
 

@@ -7,8 +7,9 @@ import socket
 import threading
 import logging
 import json
+import random
 import pika as pk
-from config import RABBITMQ_SERVER, GATEWAY_PORT, GATEWAY_EXCHANGE
+from config import RABBITMQ_SERVER, GATEWAY_PORT, GATEWAY_EXCHANGE, NFVIN_EXCHANGE
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,22 +17,22 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
+def rabbit_connect():
+    connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
+    return connection.channel()
+
 class Gateway:
     def __init__(self, host='0.0.0.0', port=GATEWAY_PORT):
-        # Connect to RabbitMq
-        self.connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
-        self.channel = self.connection.channel()
-
         # Start to listen to exchange
-        self.channel.exchange_declare(exchange=GATEWAY_EXCHANGE,
-                                      exchange_type='fanout')
+        # self.channel.exchange_declare(exchange=GATEWAY_EXCHANGE,
+                                      # exchange_type='fanout')
 
-        result = self.channel.queue_declare(queue="", exclusive=True)
-        queue_name = result.method.queue
-        self.channel.queue_bind(queue=queue_name, exchange=GATEWAY_EXCHANGE)
-        self.channel.basic_consume(queue=queue_name,
-                                   on_message_callback=self.treat_gateway,
-                                   auto_ack=True)
+        # result = self.channel.queue_declare(queue="", exclusive=True)
+        # queue_name = result.method.queue
+        # self.channel.queue_bind(queue=queue_name, exchange=GATEWAY_EXCHANGE)
+        # self.channel.basic_consume(queue=queue_name,
+                                   # on_message_callback=self.treat_gateway,
+                                   # auto_ack=True)
         self.host = host
         self.port = port
         self.server_socket = None
@@ -56,6 +57,16 @@ class Gateway:
             threading.Thread(target=self.handle_client, args=(client_socket, addr), daemon=True).start()
 
     def start_rabbitmq(self):
+        self.channel = rabbit_connect()
+        self.channel.exchange_declare(exchange=GATEWAY_EXCHANGE,
+                                      exchange_type='fanout')
+
+        result = self.channel.queue_declare(queue="", exclusive=True)
+        queue_name = result.method.queue
+        self.channel.queue_bind(queue=queue_name, exchange=GATEWAY_EXCHANGE)
+        self.channel.basic_consume(queue=queue_name,
+                                   on_message_callback=self.treat_gateway,
+                                   auto_ack=True)
         logging.info("Started listening to RabbitMQ queues")
         self.channel.start_consuming()
 
@@ -72,7 +83,7 @@ class Gateway:
             self.sfc_catalog[msg["sfc_id"]] = msg["sfc"]
         elif action == "sfc-delete":
             logging.info("SFC %s deleted.", )
-            if self.sfc_catalog[msg[sfc_id"]]:
+            if self.sfc_catalog[msg["sfc_id"]]:
                 del self.sfc_catalog[msg["sfc_id"]]
         else:
             logging.info("Command unknown!")
@@ -80,18 +91,42 @@ class Gateway:
 
 
     def handle_client(self, client_socket, addr):
-        print(self.clients)
+        internal_channel = rabbit_connect()
         with client_socket:
             while True:
                 try:
                     data = client_socket.recv(1024)
                     if not data:
                         break
+                    # 
                     print(f"{addr} {data.decode(errors='ignore')}")
+                    sfc_id = self.route_to_sfc(data, addr)
+                    if sfc_id is not None:
+                        print(self.sfc_catalog[sfc_id])
+                        queue_in = self.sfc_catalog[sfc_id]["queue_in"]
+                        # Forward data to SFC
+                        # self.channel.basic_publish(exchange="", routing_key=queue_in,
+                                                   # body=data)
+                        # Forward data to Sniffer
+                        internal_channel.basic_publish(exchange=NFVIN_EXCHANGE, routing_key="",
+                                                   body=data)
+
                 except ConnectionResetError:
                     logging.info("Client %s disconnected.", addr)
                     del self.clients[addr]
                     break
+    
+    def route_to_sfc(self, data, addr):
+        """Given a package and an address, route to the correct SFC
+            @param data: Package received
+            @param addr: Client address
+            @returns a valid SFC ID, returns None if an error ocurred"""
+        # TODO: add some logic here, by now, returning a random sfc_id
+        try:
+            sfc_id = random.choice(list(self.sfc_catalog.keys()))
+        except:
+            return None
+        return sfc_id
                     
     def stop(self):
         self.running = False
