@@ -4,23 +4,62 @@ import os
 import time
 import sys
 from tabulate import tabulate #type: ignore
-from config import RABBITMQ_SERVER, NFVO_EXCHANGE, VNFM_EXCHANGE, VIM_EXCHANGE
+from config import RABBITMQ_SERVER, NFVO_EXCHANGE, VNFM_EXCHANGE, VIM_EXCHANGE, IDS_EXCHANGE
 
 connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
 channel = connection.channel()
 result = channel.queue_declare(queue="", exclusive = True)
 queue = result.method.queue
 
-def wait_for_message():
+
+# ASCII color codes
+RED = "\033[91m"
+GREEN = "\033[92m"
+RESET = "\033[0m"
+
+def wait_for_message(timeout=None):
+    start_time = time.time()
     while True:
         method_frame, header_frame, body = channel.basic_get(queue=queue, auto_ack=True)
         if method_frame:
             return body.decode()
-        time.sleep(0.1) 
+        if timeout is not None and (time.time() - start_time) >= timeout:
+            return None
+        time.sleep(0.1)
 
+def get_status():
+    """Get the status of each NFV module + IDS"""
+    modules = {
+        "NFVO": NFVO_EXCHANGE,
+        "VNFM": VNFM_EXCHANGE,
+        "VIM": VIM_EXCHANGE,
+        "IDS": IDS_EXCHANGE
+    }
+    
+    msg = json.dumps({
+        "action": "heartbeat",
+        "rqueue": queue
+    })
+
+    table = []
+    for module, exchange in modules.items():
+        status = "OFF"
+        try:
+            channel.basic_publish(exchange=exchange, routing_key="", body=msg)
+            response = wait_for_message(timeout=2)
+            if response == "ok":
+                status = "OK"
+        except:
+            pass
+        color_status = f"{GREEN}{status}{RESET}" if status == "OK" else f"{RED}{status}{RESET}"
+        table.append([module, color_status])
+
+    print(tabulate(table, headers=["Module", "Status"], tablefmt="grid"))            
+    
 def show_commands():
     commands = {
         "list" : "List all commands",
+        "status": "Show the status of each NFV component",
         "create_sfc" : "Creates a SFC",
         "purge_sfc" : "Purges a SFC",
         "list_sfc" : "List all SFCs",
@@ -64,6 +103,8 @@ def read_command():
         channel.basic_publish(exchange=VNFM_EXCHANGE,
                               routing_key="", body=msg)
         print(f"{sfc_id} created.")
+    elif command == "status":
+        get_status()
     elif command == "purge_sfc":
         msg = get_sfc_list()
         sfcs = list(msg.keys())
