@@ -11,7 +11,15 @@ import queue
 from config import RABBITMQ_SERVER, NFVIN_EXCHANGE, IDS_EXCHANGE, VNFM_EXCHANGE
 
 class OAD:
+    """
+    The OAD is responsible for creating an abastraction driver to allow the IDS to operate in multiple
+    NFV-scenarios.
+
+    In this implementation, connects to NFV using RabbitMQ and offer functions to
+    the IDS to send and receive messages.
+    """
     def __init__(self):
+        """Init OAD internal structure"""
         self.connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
         self.channel = self.connection.channel()
 
@@ -40,27 +48,33 @@ class OAD:
 
 
     def __sniff(self, ch, method, properties, body):
+        """Upon sniffing a packet, add to recv queue"""
         logging.info("Sniffed: %s", body.decode())
-        # Upon receiving a message, 
+        # Upon receiving a message, place in recv queue
         self.packet_queue.put(body.decode())
 
     def get_packet(self):
+        """Used by the IDS to get packets, if the recv queue is empty, None is returned"""
         try:
             return self.packet_queue.get_nowait()
         except queue.Empty:
             return None
 
     def start_driver(self):
+        """Starts the driver (blocking)"""
         self.channel.start_consuming()
 
     def treat_message_from_mano(self, ch, method, properties, body):
+        """Treats commands received from the operator"""
         logging.info("Got from MANO: %s", body.decode())
 
     def __publish(self, message):
+        """Internal publish message function"""
         self.channel.basic_publish(exchange=VNFM_EXCHANGE, routing_key="",
                                    body=message)
     
     def send_message(self, message):
+        """Function to allow the IDS to send a message to the operator"""
         self.connection.add_callback_threadsafe(
             lambda: self.__publish(message)
         )
