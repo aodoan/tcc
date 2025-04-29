@@ -10,9 +10,12 @@ import threading
 import time
 import pika as pk
 from config import RABBITMQ_SERVER, NFVIN_EXCHANGE, IDS_EXCHANGE
+import ids.configuration as ids_config
 from ids.oad import OAD
 
 logging.basicConfig(
+    filename="logs/ids.log",
+    filemode="w",
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
@@ -42,7 +45,11 @@ class IDS:
         """Initialize necessary structures and setup RabbitMQ communication"""
         self.driver = driver
 
+        self.db_file = open(ids_config.db_file, "a+")
+
+
     def start_monitoring(self):
+        """Start monitoring with the driver"""
         # First, create a thread to receive messages
         get_packets_thread = threading.Thread(target=self.__get_packets)
         get_packets_thread.daemon = True
@@ -52,17 +59,19 @@ class IDS:
         self.driver.start_driver()
 
     def __get_packets(self):
+        """Internal thread used to fetch packages from the driver recv queue"""
         while True:
             packet = self.driver.get_packet()
             if packet:
                 self.process(packet)
             else:
-                time.sleep(0.01)
+                time.sleep(ids_config.sleep_time)
 
-
-    def store_data(self):
+    def store_data(self, packet):
         """ Store a data obtained from the OAD for future referecing
         """
+        self.db_file.write(packet)
+        self.db_file.flush()
         pass
 
     def alarm(self):
@@ -74,12 +83,15 @@ class IDS:
     def process(self, package):
         """ Process a package and determine wheter or not is an intrusion
         """
+        # First step, is to store data
+        self.store_data(package)
         logging.info("[IDS] -> GOT A PACKET! %s", package)
         pass
 
     def configuration(self):
         """Handle internal configuration"""
         pass
+
 
 driver = OAD() 
 ids = IDS(driver)

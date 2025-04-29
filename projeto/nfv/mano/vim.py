@@ -12,6 +12,8 @@ from config import DOCKERFILE_DIR, IMAGE_NAME, VIM_EXCHANGE, RABBITMQ_SERVER
 from config import net
 
 logging.basicConfig(
+    filename="logs/vim.log",
+    filemode="w",
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
@@ -91,7 +93,9 @@ class VIM:
         for idx, (stored_id, container) in enumerate(self.running_containers):
             if stored_id == vnf_id:
                 try:
-                    container.stop()  # Docker SDK: stop the container
+                    #container.stop()  # Docker SDK: stop the container
+                    # killing instead of stopping
+                    container.kill()  # Docker SDK: stop the container
                     del self.running_containers[idx]
                     logging.info("Container for VNF %s stopped and removed from the list.", vnf_id)
                 except Exception as e:

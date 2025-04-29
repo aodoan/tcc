@@ -2,7 +2,7 @@
 Implementation of NFV-GATEWAY
 Listens to clients in a TCP port, and foward the packets to SFCs
 """
-
+import sys
 import socket
 import threading
 import logging
@@ -12,6 +12,8 @@ import pika as pk
 from config import RABBITMQ_SERVER, GATEWAY_PORT, GATEWAY_EXCHANGE, NFVIN_EXCHANGE
 
 logging.basicConfig(
+    filename="logs/gateway.log",
+    filemode="w",
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
@@ -141,7 +143,9 @@ class Gateway:
 
 # Example usage:
 if __name__ == "__main__":
-    ap = Gateway()
+    if len(sys.argv) == 2:
+        port = int(sys.argv[1])
+    ap = Gateway(port=port)
     try:
         ap.start()
     except KeyboardInterrupt:

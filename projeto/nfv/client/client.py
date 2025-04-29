@@ -31,6 +31,21 @@ def show_commands():
     table = [(cmd, desc) for cmd, desc in commands.items()]
     print(tabulate(table, headers=["Command", "Description"], tablefmt="pretty"))
 
+def get_sfc_list():
+    msg = json.dumps({
+        "action": "list_sfc",
+        "return_queue" : queue
+    })
+    channel.basic_publish(exchange=VNFM_EXCHANGE,
+                            routing_key="", body=msg)
+    body = wait_for_message()
+    try:
+        msg = json.loads(body)
+    except:
+        print("Error decoding response from VNFM")
+        return
+    return msg
+
 def read_command():
     command = input("nfv-mano> ")
     if command == "list":
@@ -48,29 +63,44 @@ def read_command():
         })
         channel.basic_publish(exchange=VNFM_EXCHANGE,
                               routing_key="", body=msg)
-    elif command == "list_sfc":
-        msg = json.dumps({
-            "action": "list_sfc",
-            "return_queue" : queue
-        })
-        channel.basic_publish(exchange=VNFM_EXCHANGE,
-                              routing_key="", body=msg)
-        body = wait_for_message()
-        try:
-            msg = json.loads(body)
-        except:
-            print("Error decoding response from VNFM")
-            return
-        table = []
+        print(f"{sfc_id} created.")
+    elif command == "purge_sfc":
+        msg = get_sfc_list()
+        sfcs = list(msg.keys())
+        if len(command.split()) == 1:
+            sfc_id = input("SFC ID: ")
+        else:
+            sfc_id = command.split()[1]
 
+        if sfc_id not in sfcs:
+            print("SFC not in the list of SFC's.")
+            print(sfcs)
+        else:
+            delete_msg = json.dumps({
+                "action": "delete_sfc",
+                "sfc_id" : sfc_id
+            })
+            channel.basic_publish(exchange=VNFM_EXCHANGE,
+                                    routing_key="", body=delete_msg)
+            print(f"{sfc_id} purged.")
+
+    elif command == "list_sfc":
+        msg = get_sfc_list()
+        table = []
+        sfcs = list(msg.keys())
+        counter = 0
         for sfc_data in msg.values():
             for vnf_id, queues in sfc_data['sfc'].items():
                 table.append([
-                    vnf_id,
-                    queues['queue_in'],
-                    queues['queue_out']
+                    vnf_id
+                    #queues['queue_in'],
+                    #queues['queue_out']
                 ])
-        print(tabulate(table, headers=["VNF-ID", "Queue In", "Queue Out"], tablefmt="pretty"))
+            sfc_id = sfcs[counter]
+            counter += 1
+            print(f"{'=' * len(sfc_id)}{'\n'}{sfc_id}{'\n'}{'=' * len(sfc_id)}") # sorry for that line
+            #print(tabulate(table, headers=["VNF-ID", "Queue In", "Queue Out"], tablefmt="pretty"))
+            print(tabulate(table, headers=["VNF-ID"], tablefmt="pretty"))
 
 
     elif command == "clear":

@@ -1,5 +1,9 @@
 """
 This file contain implementation of a Orchestrator Abstraction Driver (OAD)
+
+The OAD is a adapter between multiple different technologies of NFV
+with the IDS. The OAD is responsible for all the communication and
+the collection of packets to be analyzed by the System.
 """
 import pika as pk
 import logging
