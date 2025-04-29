@@ -7,6 +7,7 @@ the collection of packets to be analyzed by the System.
 """
 import pika as pk
 import logging
+import json
 import queue
 from config import RABBITMQ_SERVER, NFVIN_EXCHANGE, IDS_EXCHANGE, VNFM_EXCHANGE
 
@@ -25,7 +26,7 @@ class OAD:
 
         # 1 - Set up sniffer
         self.channel.exchange_declare(exchange=NFVIN_EXCHANGE,
-                                      exchange_type='fanout')
+                                      exchange_type='fanout', durable=True)
         result = self.channel.queue_declare(queue="", exclusive=True)
         sniff_queue = result.method.queue
         self.channel.queue_bind(queue=sniff_queue, exchange=NFVIN_EXCHANGE)
@@ -35,7 +36,7 @@ class OAD:
 
         # 2 - Set up OAD (IDS interface)
         self.channel.exchange_declare(exchange=IDS_EXCHANGE,
-                                      exchange_type='fanout')
+                                      exchange_type='fanout', durable=True)
         result = self.channel.queue_declare(queue="", exclusive=True)
         oad_queue = result.method.queue
         self.channel.queue_bind(queue=oad_queue, exchange=IDS_EXCHANGE)
@@ -67,6 +68,17 @@ class OAD:
     def treat_message_from_mano(self, ch, method, properties, body):
         """Treats commands received from the operator"""
         logging.info("Got from MANO: %s", body.decode())
+        print("Got from MANO: %s", body.decode())
+        msg = None
+        try:
+            msg = json.loads(body.decode())
+        except:
+            return
+        action = msg["action"]
+        if action == "heartbeat":
+            print("got heartbeat")
+            self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
+                                       body="ok")
 
     def __publish(self, message):
         """Internal publish message function"""

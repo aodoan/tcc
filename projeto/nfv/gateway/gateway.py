@@ -87,6 +87,10 @@ class Gateway:
             logging.info("SFC %s deleted.", )
             if self.sfc_catalog[msg["sfc_id"]]:
                 del self.sfc_catalog[msg["sfc_id"]]
+        elif action == "heartbeat":
+            print("got heartbeat")
+            self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
+                                       body="ok")
         else:
             logging.info("Command unknown!")
 

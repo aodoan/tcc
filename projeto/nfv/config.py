@@ -20,7 +20,7 @@ DOCKERFILE_DIR = "/".join([part for part
                            in DOCKERFILE_PATH.split("/")[:-1]])
 
 IMAGE_NAME = "nfv-instance"
-GATEWAY_PORT = 34002
+GATEWAY_PORT = 34005
 
 class NetConfig:
     network_name = "nfv-comm-network"

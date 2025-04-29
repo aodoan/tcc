@@ -24,13 +24,14 @@ def wait_for_message(timeout=None):
         if method_frame:
             return body.decode()
         if timeout is not None and (time.time() - start_time) >= timeout:
+
             return None
         time.sleep(0.1)
 
 def get_status():
     """Get the status of each NFV module + IDS"""
     modules = {
-        "NFVO": NFVO_EXCHANGE,
+        #"NFVO": NFVO_EXCHANGE,
         "VNFM": VNFM_EXCHANGE,
         "VIM": VIM_EXCHANGE,
         "IDS": IDS_EXCHANGE
@@ -49,7 +50,9 @@ def get_status():
             response = wait_for_message(timeout=2)
             if response == "ok":
                 status = "OK"
-        except:
+        except Exception as e:
+            print("EXCEPTION!")
+            print(e)
             pass
         color_status = f"{GREEN}{status}{RESET}" if status == "OK" else f"{RED}{status}{RESET}"
         table.append([module, color_status])

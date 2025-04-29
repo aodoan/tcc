@@ -44,7 +44,7 @@ class VNFM():
 
         # Start to listen to exchange
         self.channel.exchange_declare(exchange=VNFM_EXCHANGE,
-                                      exchange_type='fanout')
+                                      exchange_type='fanout', durable=True)
 
         result = self.channel.queue_declare(queue="", exclusive=True)
         queue_name = result.method.queue
@@ -79,6 +79,10 @@ class VNFM():
             self.cleanup_sfc(sfc_id=msg["sfc_id"])
         elif action == "list_sfc":
             self.list_sfc(msg["return_queue"])
+        elif action == "heartbeat":
+            print("got heartbeat")
+            self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
+                                       body="ok")
         else:
             logging.info("Unknown message type!")
 

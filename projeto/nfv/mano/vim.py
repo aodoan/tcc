@@ -27,7 +27,7 @@ class VIM:
 
         # Start to listen to exchange for commands 
         self.channel.exchange_declare(exchange=VIM_EXCHANGE,
-                                      exchange_type='fanout')
+                                      exchange_type='fanout', durable=True)
         result = self.channel.queue_declare(queue="", exclusive=True)
         queue_name = result.method.queue
         self.channel.queue_bind(queue=queue_name, exchange=VIM_EXCHANGE)
@@ -66,6 +66,10 @@ class VIM:
             self.start_container(cmd, vnf_id=msg["vnf_id"])
         elif action == "stop":
             self.stop_container(msg["vnf_id"])
+        elif action == "heartbeat":
+            print("got heartbeat")
+            self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
+                                       body="ok")
 
     def start_container(self, cmd, vnf_id=""):
         """ Start the container
