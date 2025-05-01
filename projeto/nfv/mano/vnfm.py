@@ -86,6 +86,7 @@ class VNFM():
         else:
             logging.info("Unknown message type!")
 
+    # mover isso pra NFVO e fazer um create_VNF no vnfm
     def instantiate_sfc(self, sfc_id, types, n):
         """ Creates a SFC
             @param sfc_id: Unique SFC identifier
