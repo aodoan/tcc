@@ -31,7 +31,7 @@ def wait_for_message(timeout=None):
 def get_status():
     """Get the status of each NFV module + IDS"""
     modules = {
-        #"NFVO": NFVO_EXCHANGE,
+        "NFVO": NFVO_EXCHANGE,
         "VNFM": VNFM_EXCHANGE,
         "VIM": VIM_EXCHANGE,
         "IDS": IDS_EXCHANGE
@@ -78,13 +78,13 @@ def get_sfc_list():
         "action": "list_sfc",
         "return_queue" : queue
     })
-    channel.basic_publish(exchange=VNFM_EXCHANGE,
+    channel.basic_publish(exchange=NFVO_EXCHANGE,
                             routing_key="", body=msg)
     body = wait_for_message()
     try:
         msg = json.loads(body)
     except:
-        print("Error decoding response from VNFM")
+        print("Error decoding response from NFVO")
         return
     return msg
 
@@ -103,7 +103,7 @@ def read_command():
             "sfc_id": sfc_id,
             "sfc_size": vnf_num
         })
-        channel.basic_publish(exchange=VNFM_EXCHANGE,
+        channel.basic_publish(exchange=NFVO_EXCHANGE,
                               routing_key="", body=msg)
         print(f"{sfc_id} created.")
     elif command == "status":
@@ -124,7 +124,7 @@ def read_command():
                 "action": "delete_sfc",
                 "sfc_id" : sfc_id
             })
-            channel.basic_publish(exchange=VNFM_EXCHANGE,
+            channel.basic_publish(exchange=NFVO_EXCHANGE,
                                     routing_key="", body=delete_msg)
             print(f"{sfc_id} purged.")
 

@@ -7,7 +7,6 @@ set -e
 
 # 1. Activate the virtual environment
 source ./venv/bin/activate
-
 python3 -m mano.vim &
 PID1=$!
 python3 -m mano.vnfm &
@@ -16,11 +15,14 @@ python3 -m ids.ids &
 PID3=$!
 python3 -m gateway.gateway $gateway_port &
 PID4=$!
+python3 -m mano.nfvo &
+PID5=$!
+
 echo Gateway in TCP port: $gateway_port
 # Function to kill everything on CTRL+C
 cleanup() {
     echo "Stopping all processes..."
-    kill $PID1 $PID2 $PID3 $PID4
+    kill $PID1 $PID2 $PID3 $PID4 $PID5
     wait
     echo "All processes stopped."
     exit 0

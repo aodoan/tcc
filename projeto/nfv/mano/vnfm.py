@@ -18,13 +18,6 @@ from config import RABBITMQ_SERVER, VNFM_EXCHANGE, VIM_EXCHANGE, GATEWAY_EXCHANG
 import json
 import time
 
-logging.basicConfig(
-    filename="logs/vnfm.log",
-    filemode="w",
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
 @dataclass
 class VNFDescriptor:
     """Describe all the necessary information of a VNF"""
@@ -34,11 +27,13 @@ class VNFDescriptor:
     nf_type: Optional[str] = None # Name of the Network Function
     sw_image: Optional[str] = None # Path to the image
 
+print("HERE!")
 class VNFM():
     def __init__(self):
         """Init VNFM
             @param channel: RabbitMQ channel connection"""
         
+        logging.info("Starting module.")
         self.connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
         self.channel = self.connection.channel()
 
@@ -53,10 +48,11 @@ class VNFM():
                                    on_message_callback=self.treat_vnfm,
                                    auto_ack=True)
 
-        logging.info("Listening to controls in %s", queue_name)
+        logging.debug("VNFM listening in queue: %s", queue_name)
 
         self.__vnf_id = [] # Store all the current instantiated VNFs identifier
         self.sfc_list = []
+        logging.info("Module started.")
         self.channel.start_consuming()
     
     def treat_vnfm(self, ch, method, properties, body):
@@ -71,145 +67,55 @@ class VNFM():
             return
 
         action = msg["action"]
-        if action == "create_sfc":
-            self.instantiate_sfc(sfc_id=msg["sfc_id"],
-                                 types=[],
-                                 n=msg["sfc_size"])
-        elif action == "delete_sfc":
-            self.cleanup_sfc(sfc_id=msg["sfc_id"])
-        elif action == "list_sfc":
-            self.list_sfc(msg["return_queue"])
+        if action == "create_vnf":
+            self.create_vnf(vnf_id=msg["vnf_id"],
+                            qin=msg["qin"], qout=msg["qout"])
+        elif action == "delete_vnf":
+            self.delete_vnf(sfc_id=msg["sfc_id"])
         elif action == "heartbeat":
-            print("got heartbeat")
             self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
                                        body="ok")
         else:
             logging.info("Unknown message type!")
 
-    # mover isso pra NFVO e fazer um create_VNF no vnfm
-    def instantiate_sfc(self, sfc_id, types, n):
-        """ Creates a SFC
-            @param sfc_id: Unique SFC identifier
-            @param types: Specify each VNF type
-            @param n: Number of VNFs"""
-        # TODO: check if types are ok etc
-        vnfs = []
-        queues = []
-
-        # First, generate n+1 queues
-        for i in range(n + 1):
-            # for each VNF, generate two queues
-            result = self.channel.queue_declare("")
-            queues.append(result.method.queue)
-
-        # With all the queues generated, create the VNF descriptors
-        for i in range(n):
-            id = self.generate_id()
-            vnfs.append(VNFDescriptor(id,
-                                      queue_in=queues[i],
-                                      queue_out=queues[i+1]))
-
-        _sfc = SFC(vnfs, queues, channel=self.channel)
-        self.sfc_list.append((sfc_id, _sfc))
-        # Now, instantiate each VNF
-        for vnf in vnfs:
+    def create_vnf(self, vnf_id, qin, qout):
+        # first, check to see if the id is duplicated
+        if vnf_id not in self.__vnf_id:
             message = {
-                "action" : "start",
-                "vnf_id" : vnf.vnf_id,
-                "sfc_id" : sfc_id,
-                "qin" : vnf.queue_in,
-                "qout": vnf.queue_out
+                "action" : "create_vnf",
+                "vnf_id" : vnf_id,
+                "qin" : qin,
+                "qout": qout
             }
-            self.channel.basic_publish(exchange=VIM_EXCHANGE, body=json.dumps(message), routing_key="")
-        
-        # Upon creating a SFC, send message to Gateway
-        msg = {
-            "action" : "sfc-creation",
-            "sfc_id" : sfc_id,
-            "sfc" : {
-                "queue_in" : queues[0],
-                "queue_out": queues[-1]
-            }
-        }
-        self.channel.basic_publish(exchange=GATEWAY_EXCHANGE,
-                                   body=json.dumps(msg),
-                                   routing_key="")
 
-        logging.info("SFC (%s) created by VNFM. Endpoints %s %s",
-                     sfc_id, queues[0], queues[-1])
+            self.channel.basic_publish(exchange=VNFM_EXCHANGE,
+                                       body=json.dumps(message), routing_key="")
+            return
 
-        return _sfc
+        logging.error("VNF ID duplicate found. There is an error in NFVO!")
 
-    def cleanup_sfc(self, sfc_id):
-        for idx, (stored_id, sfc) in enumerate(self.sfc_list):
-            if stored_id == sfc_id:
-                # Stop the containers
-                for vnf in sfc.vnfs:
-                    msg = json.dumps({
-                        "action":"stop",
-                        "vnf_id": vnf.vnf_id
-                    })
-                    self.channel.basic_publish(
-                        exchange=VIM_EXCHANGE,
-                        body=msg,
-                        routing_key="")
-                    logging.info("Stopping %s", vnf.vnf_id)
-                # Clean RabbitMQ queues
-                for queue in sfc.queues:
-                    self.channel.queue_delete(queue)
-                del self.sfc_list[idx]
-                break
-        msg = {
-            "action" : "sfc-delete",
-            "sfc_id" : sfc_id,
-        }
-        self.channel.basic_publish(exchange=GATEWAY_EXCHANGE,
-                                   body=json.dumps(msg),
-                                   routing_key="")
-    
-    def list_sfc(self, ret_queue):
-        sfcs = {}
-        for (sfc_id, sfc) in self.sfc_list:
-            vnf_dict = {}
-            for vnf in sfc.vnfs:
-                vnf_dict[vnf.vnf_id] = {
-                    "queue_in": vnf.queue_in,
-                    "queue_out": vnf.queue_out
-                }
-            sfcs[sfc_id] = {"sfc": vnf_dict}
+    def delete_vnf(self, vnf_id):
+        if vnf_id in self.__vnf_id:
+            msg = json.dumps({
+                "action":"stop",
+                "vnf_id": vnf_id
+            })
+            self.channel.basic_publish(
+                exchange=VIM_EXCHANGE,
+                body=msg,
+                routing_key="")
+            logging.info("Stopping %s", vnf_id)
+            return
 
-        print(json.dumps(sfcs, indent=4))
-        self.channel.basic_publish(exchange="", routing_key=ret_queue,
-                                   body=json.dumps(sfcs, indent=4))
-        return sfcs
-    
-    def generate_id(self, prefix="vnf-", length=6, max_attempts=20):
-        """ Generate a random id and add to vnf_id list
-            @param prefix: Constant string to be added before all generate Ids
-            @param length: Number of random letters generated
-            @param max_attempts: Number of attempts to create a unique id"""
-        for i in range(max_attempts):
-            id = prefix + ''.join(random.choices(string.ascii_letters, k=length))
-            if id not in self.__vnf_id:
-                self.__vnf_id.append(id)
-                return id
-        logging.error("Could not generate a unique ID")
-        return None
+if __name__ == "__main__":
+    logging.basicConfig(
+        filename="logs/vnfm.log",
+        filemode="w",
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | [VNFM] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
 
-a = VNFM()
+    vnfm = VNFM()
 
-# Example 
-# connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
-# channel = connection.channel()
-# vnfm = VNFM(channel=channel)
-
-# sfc = vnfm.instantiate_sfc("sfc-5", [], 3)
-# qin, qout = sfc.endpoints()
-# print(f"Queue in: {qin}, queue out: {qout}")
-# while True:
-    # inp = input("Digite q para sair")
-    # if inp == "q":
-        # break
-
-# vnfm.cleanup_sfc("sfc-5")
 
