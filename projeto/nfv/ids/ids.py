@@ -3,23 +3,11 @@ This file contain the implementantion of a IDS (Intrusion Detection System)
 
 """
 import logging
-import os
-import sys
-import json
 import threading
 import time
 import pika as pk
-from config import RABBITMQ_SERVER, NFVIN_EXCHANGE, IDS_EXCHANGE
 import ids.configuration as ids_config
 from ids.oad import OAD
-
-logging.basicConfig(
-    filename="logs/ids.log",
-    filemode="w",
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
 
 class IDS:
     """
@@ -85,7 +73,6 @@ class IDS:
         """
         # First step, is to store data
         self.store_data(package)
-        logging.info("[IDS] -> GOT A PACKET! %s", package)
         pass
 
     def configuration(self):
@@ -93,6 +80,15 @@ class IDS:
         pass
 
 
-driver = OAD() 
-ids = IDS(driver)
-ids.start_monitoring()
+if __name__ == "__main__":
+    logging.basicConfig(
+        filename="logs/ids.log",
+        filemode="w",
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+
+    driver = OAD() 
+    ids = IDS(driver)
+    ids.start_monitoring()

@@ -51,8 +51,6 @@ def get_status():
             if response == "ok":
                 status = "OK"
         except Exception as e:
-            print("EXCEPTION!")
-            print(e)
             pass
         color_status = f"{GREEN}{status}{RESET}" if status == "OK" else f"{RED}{status}{RESET}"
         table.append([module, color_status])

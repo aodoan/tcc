@@ -11,14 +11,6 @@ import pika as pk
 from config import DOCKERFILE_DIR, IMAGE_NAME, VIM_EXCHANGE, RABBITMQ_SERVER
 from config import net
 
-logging.basicConfig(
-    filename="logs/vim.log",
-    filemode="w",
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
-
 class VIM:
     def __init__(self):
         """Start all services and internal structures"""
@@ -67,7 +59,6 @@ class VIM:
         elif action == "stop":
             self.stop_container(msg["vnf_id"])
         elif action == "heartbeat":
-            print("got heartbeat")
             self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
                                        body="ok")
 
@@ -75,7 +66,7 @@ class VIM:
         """ Start the container
         """
         cmd = cmd.split(" ")
-        logging.info("Starting container")
+        logging.info("Starting container with vnf_id: %s.", vnf_id)
         try:
             container = self.client.containers.run(
                 self.image,
@@ -125,11 +116,13 @@ class VIM:
             logging.info("Stopping VNF: %s", vnf_id)
             container.kill()
 
-a = VIM()
-# a = VIM()
-# cont = a.start_container("python ./instance.py vnf-16 sfc-10 qin qout")
-# try:
-    # time.sleep(3000)
-# except KeyboardInterrupt:
-    # a.kilL_all()
-# a.monitor_container(cont)
+if __name__ == "__main__":
+    logging.basicConfig(
+        filename="logs/vim.log",
+        filemode="w",
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | VIM | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+
+    a = VIM()

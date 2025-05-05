@@ -31,16 +31,16 @@ except:
 logging.info("QUEUES: %s %s", q_in, q_out)
 
 def nf(input):
-    return f"{input} -> {vnf_id}"
+    return input
 
 
 vnf = VNF(vnf_id, sfc_id, q_in, q_out, nf, create_queue=False)
 def handle_sigterm():
     logging.info("Received SIGTERM")
     vnf.stop_service()
+
 # Register SIGTERM to end process
 signal.signal(signal.SIGTERM, handle_sigterm)
-
 
 print("INPUT QUEUE: " + vnf.get_queue_in())
 print("OUTPUT QUEUE: " + vnf.get_queue_out())

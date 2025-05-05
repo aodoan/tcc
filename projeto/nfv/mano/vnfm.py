@@ -27,7 +27,6 @@ class VNFDescriptor:
     nf_type: Optional[str] = None # Name of the Network Function
     sw_image: Optional[str] = None # Path to the image
 
-print("HERE!")
 class VNFM():
     def __init__(self):
         """Init VNFM
@@ -48,7 +47,7 @@ class VNFM():
                                    on_message_callback=self.treat_vnfm,
                                    auto_ack=True)
 
-        logging.debug("VNFM listening in queue: %s", queue_name)
+        logging.info("VNFM listening in queue: %s.", queue_name)
 
         self.__vnf_id = [] # Store all the current instantiated VNFs identifier
         self.sfc_list = []
@@ -56,7 +55,7 @@ class VNFM():
         self.channel.start_consuming()
     
     def treat_vnfm(self, ch, method, properties, body):
-        logging.debug("VNFM received command %s", body.decode())
+        logging.debug("Received command %s", body.decode())
 
         # parse msg to json
         msg = None
@@ -69,7 +68,7 @@ class VNFM():
         action = msg["action"]
         if action == "create_vnf":
             self.create_vnf(vnf_id=msg["vnf_id"],
-                            qin=msg["qin"], qout=msg["qout"])
+                            qin=msg["qin"], qout=msg["qout"], sfc_id=msg["sfc_id"])
         elif action == "delete_vnf":
             self.delete_vnf(sfc_id=msg["sfc_id"])
         elif action == "heartbeat":
@@ -78,23 +77,25 @@ class VNFM():
         else:
             logging.info("Unknown message type!")
 
-    def create_vnf(self, vnf_id, qin, qout):
+    def create_vnf(self, vnf_id, qin, qout, sfc_id=""):
         # first, check to see if the id is duplicated
         if vnf_id not in self.__vnf_id:
             message = {
-                "action" : "create_vnf",
+                "action" : "start",
                 "vnf_id" : vnf_id,
+                "sfc_id" : sfc_id,
                 "qin" : qin,
                 "qout": qout
             }
 
-            self.channel.basic_publish(exchange=VNFM_EXCHANGE,
+            self.channel.basic_publish(exchange=VIM_EXCHANGE,
                                        body=json.dumps(message), routing_key="")
             return
 
         logging.error("VNF ID duplicate found. There is an error in NFVO!")
 
     def delete_vnf(self, vnf_id):
+        """Deltes a vnf"""
         if vnf_id in self.__vnf_id:
             msg = json.dumps({
                 "action":"stop",
@@ -112,7 +113,7 @@ if __name__ == "__main__":
         filename="logs/vnfm.log",
         filemode="w",
         level=logging.INFO,
-        format="%(asctime)s | %(levelname)s | [VNFM] %(message)s",
+        format="%(asctime)s | %(levelname)s | VNFM | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
 

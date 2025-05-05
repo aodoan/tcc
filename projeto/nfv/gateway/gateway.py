@@ -9,15 +9,8 @@ import logging
 import json
 import random
 import pika as pk
+from queue import Queue
 from config import RABBITMQ_SERVER, GATEWAY_PORT, GATEWAY_EXCHANGE, NFVIN_EXCHANGE
-
-logging.basicConfig(
-    filename="logs/gateway.log",
-    filemode="w",
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
 
 def rabbit_connect():
     connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
@@ -25,16 +18,6 @@ def rabbit_connect():
 
 class Gateway:
     def __init__(self, host='0.0.0.0', port=GATEWAY_PORT):
-        # Start to listen to exchange
-        # self.channel.exchange_declare(exchange=GATEWAY_EXCHANGE,
-                                      # exchange_type='fanout')
-
-        # result = self.channel.queue_declare(queue="", exclusive=True)
-        # queue_name = result.method.queue
-        # self.channel.queue_bind(queue=queue_name, exchange=GATEWAY_EXCHANGE)
-        # self.channel.basic_consume(queue=queue_name,
-                                   # on_message_callback=self.treat_gateway,
-                                   # auto_ack=True)
         self.host = host
         self.port = port
         self.server_socket = None
@@ -50,12 +33,12 @@ class Gateway:
         self.server_socket.bind((self.host, self.port))
         self.server_socket.listen()
         self.running = True
-        logging.info(f"[INFO] Gateway listening on {self.host}:{self.port}")
+        logging.info("Gateway listening on %s:%s", self.host, self.port)
 
         while self.running:
             client_socket, addr = self.server_socket.accept()
             self.clients[addr] = client_socket
-            logging.info(f"[INFO] Client {addr} connected")
+            logging.info("Client %s connected.", addr)
             threading.Thread(target=self.handle_client, args=(client_socket, addr), daemon=True).start()
 
     def start_rabbitmq(self):
@@ -73,7 +56,6 @@ class Gateway:
         self.channel.start_consuming()
 
     def treat_gateway(self, ch, method, properties, body):
-        print(f"received message! {body.decode()}")
         msg = None
         try:
             msg = json.loads(body.decode())
@@ -88,7 +70,6 @@ class Gateway:
             if self.sfc_catalog[msg["sfc_id"]]:
                 del self.sfc_catalog[msg["sfc_id"]]
         elif action == "heartbeat":
-            print("got heartbeat")
             self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
                                        body="ok")
         else:
@@ -107,10 +88,8 @@ class Gateway:
                     if not data:
                         break
                     # 
-                    print(f"{addr} {data.decode(errors='ignore')}")
                     sfc_id = self.route_to_sfc(data, addr)
                     if sfc_id is not None:
-                        print(self.sfc_catalog[sfc_id])
                         queue_in = self.sfc_catalog[sfc_id]["queue_in"]
 
                         # Forward data to SFC
@@ -143,10 +122,17 @@ class Gateway:
         if self.server_socket:
             self.server_socket.close()
         self.channel.stop_consuming()
-        print("[INFO] Gateway stopped.")
 
 # Example usage:
 if __name__ == "__main__":
+    logging.basicConfig(
+        filename="logs/gateway.log",
+        filemode="w",
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | BROKER | %(message)s",
+        datefmt="%m-%d %H:%M:%S"
+    )
+    port = GATEWAY_PORT
     if len(sys.argv) == 2:
         port = int(sys.argv[1])
     ap = Gateway(port=port)

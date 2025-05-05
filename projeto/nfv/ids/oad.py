@@ -21,6 +21,7 @@ class OAD:
     """
     def __init__(self):
         """Init OAD internal structure"""
+        logging.info("[OAD] Starting Module.")
         self.connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
         self.channel = self.connection.channel()
 
@@ -46,13 +47,17 @@ class OAD:
         
         # Set up queue
         self.packet_queue = queue.Queue()
+        logging.info("[OAD] Moudle setup.")
 
 
     def __sniff(self, ch, method, properties, body):
         """Upon sniffing a packet, add to recv queue"""
-        logging.info("Sniffed: %s", body.decode())
-        # Upon receiving a message, place in recv queue
-        self.packet_queue.put(body.decode())
+        try:
+            logging.debug("Sniffed: %s", body.decode())
+            # Upon receiving a message, place in recv queue
+            self.packet_queue.put(body.decode())
+        except:
+            pass
 
     def get_packet(self):
         """Used by the IDS to get packets, if the recv queue is empty, None is returned"""
@@ -67,8 +72,7 @@ class OAD:
 
     def treat_message_from_mano(self, ch, method, properties, body):
         """Treats commands received from the operator"""
-        logging.info("Got from MANO: %s", body.decode())
-        print("Got from MANO: %s", body.decode())
+        logging.debug("[OAD] Got from MANO: %s", body.decode())
         msg = None
         try:
             msg = json.loads(body.decode())
@@ -76,7 +80,6 @@ class OAD:
             return
         action = msg["action"]
         if action == "heartbeat":
-            print("got heartbeat")
             self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
                                        body="ok")
 

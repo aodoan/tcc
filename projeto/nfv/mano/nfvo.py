@@ -16,7 +16,7 @@ import json
 import pika as pk
 import logging
 from config import RABBITMQ_SERVER, NFVO_EXCHANGE, VIM_EXCHANGE, VNFM_EXCHANGE
-from config import GATEWAY_EXCHANGE
+from config import GATEWAY_EXCHANGE, FORWARDER_EXCHANGE
 from mano.vnfm import VNFDescriptor
 from sfc.sfc import SFC
 
@@ -24,7 +24,6 @@ class NFVO():
     def __init__(self):
         """Init NFVO 
             @param channel: RabbitMQ channel connection"""
-        print("A")
         logging.info("Starting module.")
         self.connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
         self.channel = self.connection.channel()
@@ -75,6 +74,7 @@ class NFVO():
             message = {
                 "action" : "create_vnf",
                 "vnf_id" : vnf.vnf_id,
+                "sfc_id" : sfc_id,
                 "qin" : vnf.queue_in,
                 "qout": vnf.queue_out
             }
@@ -90,6 +90,10 @@ class NFVO():
             }
         }
         self.channel.basic_publish(exchange=GATEWAY_EXCHANGE,
+                                   body=json.dumps(msg),
+                                   routing_key="")
+
+        self.channel.basic_publish(exchange=FORWARDER_EXCHANGE,
                                    body=json.dumps(msg),
                                    routing_key="")
 
@@ -125,6 +129,9 @@ class NFVO():
         self.channel.basic_publish(exchange=GATEWAY_EXCHANGE,
                                    body=json.dumps(msg),
                                    routing_key="")
+        self.channel.basic_publish(exchange=FORWARDER_EXCHANGE,
+                                   body=json.dumps(msg),
+                                   routing_key="")
     
     def treat_nfvo(self, ch, method, properties, body):
         logging.debug("NFVO received command %s", body.decode())
@@ -147,7 +154,6 @@ class NFVO():
         elif action == "list_sfc":
             self.list_sfc(msg["return_queue"])
         elif action == "heartbeat":
-            print("got heartbeat")
             self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
                                        body="ok")
         else:
@@ -188,7 +194,7 @@ if __name__ == "__main__":
         filename="logs/nfvo.log",
         filemode="w",
         level=logging.INFO,
-        format="%(asctime)s | %(levelname)s | [NFVO] %(message)s",
+        format="%(asctime)s | %(levelname)s | NFVO | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
     nfvo = NFVO()

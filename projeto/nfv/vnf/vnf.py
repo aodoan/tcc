@@ -52,11 +52,8 @@ class VNF():
         """Function used to receive messages"""
         if body is None:
             return
-        logging.info("Received %s", body.decode())
-        print("Received %s", body.decode())
-
         try:
-            return_val = self.network_function(body.decode())
+            return_val = self.network_function(body)
 
             if return_val is not None:
                 logging.info("Sending message: %s", return_val)
@@ -70,7 +67,7 @@ class VNF():
 
     def treat_control_messages(self, ch, method, properties, body):
         # TODO: treat VNF control messages
-        print(f"WOW, received CONTROL MESSAGE! {body.decode()}")
+        print(f"received CONTROL MESSAGE! {body.decode()}")
 
     def send_message(self, payload):
         """Send a message in queue_out"""
