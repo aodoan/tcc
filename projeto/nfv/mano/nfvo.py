@@ -50,57 +50,54 @@ class NFVO():
             @param sfc_id: Unique SFC identifier
             @param types: Specify each VNF type
             @param n: Number of VNFs"""
-        # TODO: check if types are ok etc
         vnfs = []
-        queues = []
 
-        # First, generate n+1 queues
-        for i in range(n + 1):
-            # for each VNF, generate two queues
-            result = self.channel.queue_declare("")
-            queues.append(result.method.queue)
-
-        # With all the queues generated, create the VNF descriptors
+        # Create the VNF descriptors
         for i in range(n):
             id = self.generate_id()
-            vnfs.append(VNFDescriptor(id,
-                                      queue_in=queues[i],
-                                      queue_out=queues[i+1]))
+            vnfs.append(VNFDescriptor(id))
 
-        _sfc = SFC(vnfs, queues, channel=self.channel)
+        _sfc = SFC(vnfs, channel=self.channel)
         self.sfc_list.append((sfc_id, _sfc))
+
+        counter = 0
         # Now, instantiate each VNF
         for vnf in vnfs:
+            counter += 1
             message = {
                 "action" : "create_vnf",
                 "vnf_id" : vnf.vnf_id,
                 "sfc_id" : sfc_id,
-                "qin" : vnf.queue_in,
-                "qout": vnf.queue_out
+                "vnf_num" : counter,
+                "sfc_size" : n
             }
-            self.channel.basic_publish(exchange=VNFM_EXCHANGE, body=json.dumps(message), routing_key="")
-        
-        # Upon creating a SFC, send message to Gateway
-        msg = {
-            "action" : "sfc-creation",
-            "sfc_id" : sfc_id,
-            "sfc" : {
-                "queue_in" : queues[0],
-                "queue_out": queues[-1]
-            }
-        }
-        self.channel.basic_publish(exchange=GATEWAY_EXCHANGE,
-                                   body=json.dumps(msg),
-                                   routing_key="")
+            # Create a single VNF instance
+            self.channel.basic_publish(exchange=VNFM_EXCHANGE,
+                                       body=json.dumps(message), routing_key="")
 
-        self.channel.basic_publish(exchange=FORWARDER_EXCHANGE,
-                                   body=json.dumps(msg),
-                                   routing_key="")
+        # Now, wait for VNFM response with a service_ready 
 
-        logging.info("SFC (%s) created by NFVO. Endpoints %s %s",
-                     sfc_id, queues[0], queues[-1])
+        # # Upon creating a SFC, send message to Gateway with both gateways of the SFC
+        # msg = {
+            # "action" : "sfc-creation",
+            # "sfc_id" : sfc_id,
+            # "sfc" : {
+                # "start" : queues[0],
+                # "end": queues[-1]
+            # }
+        # }
+        # self.channel.basic_publish(exchange=GATEWAY_EXCHANGE,
+                                   # body=json.dumps(msg),
+                                   # routing_key="")
 
-        return _sfc
+        # self.channel.basic_publish(exchange=FORWARDER_EXCHANGE,
+                                   # body=json.dumps(msg),
+                                   # routing_key="")
+
+        # logging.info("SFC (%s) created by NFVO. Endpoints %s %s",
+                     # sfc_id, queues[0], queues[-1])
+
+        # return _sfc
 
     def cleanup_sfc(self, sfc_id):
         """ Clean all the structure of a SFC"""
@@ -145,7 +142,9 @@ class NFVO():
             return
 
         action = msg["action"]
-        if action == "create_sfc":
+        if action == "sfc_info":
+            self.create_forwarding(msg["sfc"])
+        elif action == "create_sfc":
             self.create_sfc(sfc_id=msg["sfc_id"],
                                  types=[],
                                  n=msg["sfc_size"])
@@ -158,6 +157,10 @@ class NFVO():
                                        body="ok")
         else:
             logging.info("Unknown message type: %s.", msg["action"])
+
+    def create_forwarding(self, sfc_list):
+        print(sfc_list)
+
 
     def list_sfc(self, ret_queue):
         """List all sfc"""

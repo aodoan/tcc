@@ -3,9 +3,10 @@ LABEL Maintainer="hal"
 
 WORKDIR /usr/app/src
 # To add the remote file at root directory in the container
-COPY instance.py ./
+#COPY instance.py ./
 COPY config.py ./
-COPY vnf.py ./
+#COPY vnf.py ./
+COPY tcp.py ./
 
 # Install necessary libs
 COPY requirements.txt ./

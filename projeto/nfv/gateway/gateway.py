@@ -7,22 +7,25 @@ import socket
 import threading
 import logging
 import json
+import time
 import random
 import pika as pk
 from queue import Queue
 from config import RABBITMQ_SERVER, GATEWAY_PORT, GATEWAY_EXCHANGE, NFVIN_EXCHANGE
+from config import DEFAULT_IN_PORT
 
 def rabbit_connect():
     connection = pk.BlockingConnection(pk.ConnectionParameters(RABBITMQ_SERVER))
     return connection.channel()
 
 class Gateway:
-    def __init__(self, host='0.0.0.0', port=GATEWAY_PORT):
+    def __init__(self, host='192.168.18.11', port=GATEWAY_PORT):
         self.host = host
         self.port = port
         self.server_socket = None
         self.running = False
         self.clients = {}
+        self.connections = {}
         self.sfc_catalog = {} # Store all the current instantiated SFCs
 
     def start(self):
@@ -64,17 +67,47 @@ class Gateway:
         
         action = msg["action"]
         if action == "sfc-creation":
+            logging.info("SFC %s was created.", msg["sfc_id"])
+            first_vnf = next(iter(msg["sfc"].items()))
+            self.connect_to_vnf(vnf_id=first_vnf[0], addr=first_vnf[1])
             self.sfc_catalog[msg["sfc_id"]] = msg["sfc"]
         elif action == "sfc-delete":
-            logging.info("SFC %s deleted.", )
+            logging.info("SFC %s was deleted..", msg["sfc_id"])
             if self.sfc_catalog[msg["sfc_id"]]:
                 del self.sfc_catalog[msg["sfc_id"]]
         elif action == "heartbeat":
+            logging.debug("Heartbeat message received")
             self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
                                        body="ok")
         else:
             logging.info("Command unknown!")
 
+    def connect_to_vnf(self, vnf_id, addr, max_attempts=60):
+        """Connects to a VNF at the given address and stores the socket."""
+        counter = 0
+        while counter < max_attempts:
+            try:
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.connect((addr, 2323))
+                self.connections[vnf_id] = s
+                logging.info("Connected to %s. Address: %s", vnf_id, addr)
+                return
+            except Exception as e:
+                logging.error("Connection to %s at %s failed: %s. Trying again", vnf_id, addr, e)
+            counter += 1
+            time.sleep(1)
+        logging.error("Max attempst at connect to %s", vnf_id)
+
+    def send_to_vnf(self, vnf_id, msg):
+        """Sends a message to the connected VNF."""
+        if vnf_id not in self.connections:
+            print(f"VNF {vnf_id} is not connected.")
+            return
+        try:
+            self.connections[vnf_id].sendall(msg)
+            print(f"Sent to {vnf_id}: {msg}")
+        except Exception as e:
+            print(f"Failed to send message to {vnf_id}: {e}")
 
 
     def handle_client(self, client_socket, addr):
@@ -90,15 +123,18 @@ class Gateway:
                     # 
                     sfc_id = self.route_to_sfc(data, addr)
                     if sfc_id is not None:
-                        queue_in = self.sfc_catalog[sfc_id]["queue_in"]
-
-                        # Forward data to SFC
-                        internal_channel.basic_publish(exchange="", routing_key=queue_in,
-                                                       body=data)
+                        #queue_in = self.sfc_catalog[sfc_id]["queue_in"]
+                        logging.debug("Sending data to vnf: %s", sfc_id)
+                        self.send_to_vnf(sfc_id, data)
+                        ## Forward data to SFC
+                        #internal_channel.basic_publish(exchange="", routing_key=queue_in,
+                                                       #body=data)
 
                         # Forward data to Sniffer
-                        internal_channel.basic_publish(exchange=NFVIN_EXCHANGE, routing_key="",
-                                                   body=data)
+                        #internal_channel.basic_publish(exchange=NFVIN_EXCHANGE, routing_key="",
+                                                   #body=data)
+                    else:
+                        logging.warning("Got data, but no SFC is UP!")
 
                 except ConnectionResetError:
                     logging.info("Client %s disconnected.", addr)
@@ -112,7 +148,7 @@ class Gateway:
             @returns a valid SFC ID, returns None if an error ocurred"""
         # TODO: add some logic here, by now, returning a random sfc_id
         try:
-            sfc_id = random.choice(list(self.sfc_catalog.keys()))
+            sfc_id = random.choice(list(self.connections.keys()))
         except:
             return None
         return sfc_id

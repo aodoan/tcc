@@ -12,13 +12,12 @@ import logging
 from config import VNF_CONTROL_EXCHANGE
 
 class SFC():
-    def __init__(self, instances: list, queues:list, sfc_id="", channel = None):
+    def __init__(self, instances: list, sfc_id="", channel = None):
         """Init a SFC"""
         self.sfc_id = sfc_id
         # Start VNFs pointed by instances
         self.vnfs = instances
         self.channel = channel
-        self.queues = queues
         if self.channel is not None:
             self.channel.exchange_declare(exchange=VNF_CONTROL_EXCHANGE,
                                           exchange_type="fanout")

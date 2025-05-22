@@ -11,6 +11,7 @@ VIM_EXCHANGE = "vim-exchange"
 NFVO_EXCHANGE = "nfvo-exchange"
 VNFM_EXCHANGE = "vnfm-exchange"
 GATEWAY_EXCHANGE = "nfv-gateway-exchange"
+FORWARDER_EXCHANGE = "fwd-exchange"
 
 NFVIN_EXCHANGE = "nfv-in-exchange"
 IDS_EXCHANGE = "ids-exchange"
@@ -19,9 +20,12 @@ DOCKERFILE_PATH = "/home/hal/Desktop/tcc/projeto/nfv/vnf/dockerfile"
 DOCKERFILE_DIR = "/".join([part for part
                            in DOCKERFILE_PATH.split("/")[:-1]])
 
-IMAGE_NAME = "nfv-instance"
-GATEWAY_PORT = 34005
+IMAGE_NAME = "vnf-instance-tcp"
+GATEWAY_PORT = 34101
+ENDPOINT_PORT = 35004
 
+DEFAULT_IN_PORT = 2323
+DEFAULT_OUT_PORT = 3030
 class NetConfig:
     network_name = "nfv-comm-network"
     network_ip = "192.168.1.10"
