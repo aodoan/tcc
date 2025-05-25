@@ -21,11 +21,15 @@ DOCKERFILE_DIR = "/".join([part for part
                            in DOCKERFILE_PATH.split("/")[:-1]])
 
 IMAGE_NAME = "vnf-instance-tcp"
-GATEWAY_PORT = 34101
+GATEWAY_PORT = 34103
 ENDPOINT_PORT = 35004
 
 DEFAULT_IN_PORT = 2323
 DEFAULT_OUT_PORT = 3030
+
+IDS_IP = "192.168.18.11"
+IDS_PORT = 2334
+
 class NetConfig:
     network_name = "nfv-comm-network"
     network_ip = "192.168.1.10"

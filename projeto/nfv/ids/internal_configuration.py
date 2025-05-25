@@ -1,5 +1,7 @@
 """
 Contain all the configuration of the IDS 
+
+This configuration file should not be changeable
 """
 
 db_file = "./ids/incoming_packets.csv"
@@ -7,8 +9,9 @@ sleep_time = 0.01
 
 drop_duplicates = True # Whether or not duplicate in the dataset should be removed
 convert_labels = True # Convert all normal trafic to 0 and all atacks to 1
-oversample = False # Whethe or not oversample should be used in the dataset
-datasets = ["kdd99"]
+oversample = False # Whether or not oversample should be used in the dataset
+# List all datasets
+datasets_names = ["kdd99"]
 
 features = {
     "kdd99": {
@@ -56,6 +59,7 @@ features = {
             "dst_host_srv_rerror_rate": "continuous",
             "label" : "symbolic"
         },
-        "normal_traffic" : "normal."
+        "normal_traffic" : "normal.",
+        "filename": "kddcup.data_10_percent_corrected"
     }
 }
