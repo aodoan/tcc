@@ -10,6 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import IsolationForest
 from sklearn.cluster import KMeans
+from sklearn.neighbors import LocalOutlierFactor
 from sklearn.svm import OneClassSVM
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import RandomOverSampler
@@ -87,27 +88,29 @@ class AnomalyDetector:
             split(bool): False if the whole dataset should be used for training.
             test_size(float): The percentage of the test_size. 0.0 <= x < 1.0.
         """
-        logging.info("") 
+        logging.info("[ANML] Started learning.") 
         if split is True:
             if 0 <= test_size <= 1.0:
                 self.train, self.test_df = train_test_split(self.train, test_size=test_size)
             else:
                 raise RuntimeError("Value for test_size is invalid")
 
-        if self.method == "knn":
-            print("Ok, training with KNN!")
-        elif self.method == "iforest":
+        if self.method == "iforest":
             model = IsolationForest(max_samples=100, random_state=0)
             model.fit(self.x_train)
-
-        elif self.method == "svm":
+        elif self.method == "osvm":
             print("Ok, training with One-Class SVM!")
+            model = OneClassSVM(gamma='auto')
+            model.fit(self.x_train)
+
         elif self.method == "lof":
             print("Ok, training with Local Outlier Factor!")
+            model = LocalOutlierFactor(n_neighbors=20, novelty=True)
+            model.fit(self.x_train)
         else:
             raise RuntimeError("Unsupported method selected.")
         self.model = model
-        print(self.model)
+        logging.info("[ANML] Learning finished.")
         self.is_trained = True
 
 
@@ -154,10 +157,10 @@ class AnomalyDetector:
  
         
 
-anml = AnomalyDetector()
-anml.train_model()
-line = "0,tcp,http,SF,159,4087,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,5,5,0.00,0.00,0.00,0.00,1.00,0.00,0.00,11,79,1.00,0.00,0.09,0.04,0.00,0.00,0.00,0.00,normal."
-print(anml.predict_instance(line))
+# anml = AnomalyDetector()
+# anml.train_model()
+# line = "0,tcp,http,SF,159,4087,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,5,5,0.00,0.00,0.00,0.00,1.00,0.00,0.00,11,79,1.00,0.00,0.09,0.04,0.00,0.00,0.00,0.00,normal."
+# print(anml.predict_instance(line))
 
-line = "0,icmp,ecr_i,SF,1032,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,510,510,0.00,0.00,0.00,0.00,1.00,0.00,0.00,255,255,1.00,0.00,1.00,0.00,0.00,0.00,0.00,0.00,smurf."
-print(anml.predict_instance(line))
+# line = "0,icmp,ecr_i,SF,1032,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,510,510,0.00,0.00,0.00,0.00,1.00,0.00,0.00,255,255,1.00,0.00,1.00,0.00,0.00,0.00,0.00,0.00,smurf."
+# print(anml.predict_instance(line))

@@ -109,7 +109,7 @@ class OAD:
 
     def treat_message_from_mano(self, ch, method, properties, body):
         """Treats commands received from the operator"""
-        logging.debug("[OAD] Got from MANO: %s", body.decode())
+        logging.info("[OAD] Got from MANO: %s", body.decode())
         msg = None
         try:
             msg = json.loads(body.decode())
@@ -120,20 +120,29 @@ class OAD:
             logging.info("Received heartbeat. Returning to queue: 5s", msg["rqueue"])
             self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
                                        body="ok")
-        elif action == "ids-config":
+        elif action != "":
             logging.info("Received IDS config change.")
-            self.control_queue.put(msg["new_config"])
+            self.control_queue.put(msg)
+        else:
+            logging.error("Unknow message")
+
         
 
-    def __publish(self, message):
+    def __publish(self, message, control=False, queue=""):
         """Internal publish message function"""
-        self.channel.basic_publish(exchange=VNFM_EXCHANGE, routing_key="",
-                                   body=message)
+        exchange = VNFM_EXCHANGE
+        routing_key = queue
+        if control is True:
+            exchange = ""
+        
+        self.channel.basic_publish(exchange=exchange, routing_key=routing_key,
+                                body=message)
+
     
-    def send_message(self, message):
+    def send_message(self, message, control=False, queue=""):
         """Function to allow the IDS to send a message to the operator"""
         self.connection.add_callback_threadsafe(
-            lambda: self.__publish(message)
+            lambda: self.__publish(message, control=control, queue=queue)
         )
 
 

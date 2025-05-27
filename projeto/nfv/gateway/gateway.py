@@ -126,7 +126,7 @@ class Gateway:
                     data.strip()
                     sfc_id = self.route_to_sfc(data, addr)
                     if sfc_id is not None:
-                        logging.debug("Sending data to vnf: %s", sfc_id)
+                        logging.info("Sending data to vnf: %s", sfc_id)
                         self.send_to_vnf(sfc_id, data) 
                         self.send_to_ids(data)
                     else:

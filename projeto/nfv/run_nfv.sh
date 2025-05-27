@@ -1,36 +1,39 @@
 #!/bin/bash
 
-gateway_port=30125
-
-# Exit immediately if any command fails (optional safety)
+gateway_port=30126
+fwd_port=40125
 set -e
 
-# 1. Activate the virtual environment
-source ./venv/bin/activate
-python3 -m mano.vim &
+# Get full path to venv's python
+VENV_PY="$(pwd)/venv/bin/python"
+
+# 1. Do NOT activate the virtualenv — just use its Python directly
+$VENV_PY -m mano.vim &
 PID1=$!
-python3 -m mano.vnfm &
+
+$VENV_PY -m mano.vnfm &
 PID2=$!
-python3 -m ids.ids &
+
+$VENV_PY  -m ids.ids &  # IDS runs with root but using venv Python
 PID3=$!
-python3 -m gateway.gateway $gateway_port &
+
+$VENV_PY -m gateway.gateway &
 PID4=$!
-python3 -m mano.nfvo &
+
+$VENV_PY -m mano.nfvo &
 PID5=$!
 
-echo Gateway in TCP port: $gateway_port
-# Function to kill everything on CTRL+C
+$VENV_PY -m gateway.forwarder &
+PID6=$!
+
 cleanup() {
     echo "Stopping all processes..."
-    kill $PID1 $PID2 $PID3 $PID4 $PID5
+    kill $PID1 $PID2 $PID4 $PID5 $PID6
+    sudo kill $PID3
     wait
     echo "All processes stopped."
     exit 0
 }
 
-# Trap CTRL+C (SIGINT) and call cleanup
 trap cleanup SIGINT
-
-# Wait for all scripts to finish
 wait
-
