@@ -72,7 +72,6 @@ class IDS:
             self.start_summary()
             self.detector = AnomalyDetector(method=msg["method"])
             self.detector.train_model()
-            
         elif action == "fetch_summary":
             ret = self.fetch_summary()
             self.driver.send_message(ret, control = True, queue=msg["rqueue"])
@@ -85,8 +84,6 @@ class IDS:
                 self.detector = None
         else:
             logging.error("Unknown action. [%s]", msg)
-
-        
 
     def __get_packets(self):
         """Internal thread used to fetch packages from the driver recv queue"""
@@ -117,6 +114,7 @@ class IDS:
         Args:
             message(str): A string in JSON format to be sent to the MANO
         """
+        logging.info("DETECTED AN INTRUSION")
         self.driver.send_message(message)
 
     def process(self, package):
@@ -153,8 +151,7 @@ class IDS:
             return
 
         predicted_label, actual_label = self.detector.predict_instance(package)
-        print(f"Predicted {predicted_label}")
-        print(f"Actual {actual_label}")
+        self.count(predicted_label, actual_label)
 
 
         
@@ -165,19 +162,18 @@ class IDS:
 
     def count(self, preditect_label, correct_label):
         self.summary["n_packets"] += 1
-        # 1 is normal, -1 is attack
         if preditect_label == -1:
-            if correct_label == -1: # true negative
-                self.summary["v_negatives"] += 1
-            else: # true positive 
-                self.summary["f_negatives"] += 1
-        else:
-            if correct_label == -1: # true negative
-                self.summary["f_positives"] += 1
-            else: # true positive 
+            if correct_label == -1:  # True Positive
                 self.summary["t_positives"] += 1
+            else:  # False Positive
+                self.summary["f_positives"] += 1
+        else:
+            if correct_label == -1:  # False Negative
+                self.summary["f_negatives"] += 1
+            else:  # True Negative
+                self.summary["t_negatives"] += 1
 
-        pass
+
     
     def __accuracy(self):
         vp = self.summary["t_positives"]

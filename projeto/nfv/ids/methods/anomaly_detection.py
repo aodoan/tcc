@@ -40,6 +40,10 @@ class AnomalyDetector:
             "osvm": {
                 "learning" : "unsupervised",
                 "description": "One-class Support Vector Machine"
+            },
+            "lof": {
+                "learning" : "unsupervised",
+                "description": "Local Outlier Factor"
             }
         }
         self.__methods = self.catalog.keys()
@@ -139,6 +143,11 @@ class AnomalyDetector:
 
         # Store label and drop it
         actual_label = sample["label"].strip('.')
+        if actual_label == "normal":
+            actual_label = 1
+        else:
+            actual_label = -1
+
         sample = sample.drop("label")
 
         # Apply LabelEncoders to symbolic columns

@@ -77,7 +77,6 @@ class OAD:
                 break
             #message = data.decode('utf-8').strip()
             self.packet_queue.put(data)
-            print(f"[Sniffer] Queued message: {data}")
 
 
     def __sniff(self, ch, method, properties, body):
@@ -117,7 +116,7 @@ class OAD:
             return
         action = msg["action"]
         if action == "heartbeat":
-            logging.info("Received heartbeat. Returning to queue: 5s", msg["rqueue"])
+            logging.info("Received heartbeat. Returning to queue: %s", msg["rqueue"])
             self.channel.basic_publish(exchange="", routing_key=msg["rqueue"],
                                        body="ok")
         elif action != "":

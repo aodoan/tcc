@@ -116,7 +116,6 @@ class Gateway:
     def handle_client(self, client_socket, addr):
         # RabbitMQ support one connection per thread
         # Create internal channel just for publishing messages
-        internal_channel = rabbit_connect() 
         with client_socket:
             while True:
                 try:
@@ -125,10 +124,10 @@ class Gateway:
                         break
                     data.strip()
                     sfc_id = self.route_to_sfc(data, addr)
+                    self.send_to_ids(data)
                     if sfc_id is not None:
                         logging.info("Sending data to vnf: %s", sfc_id)
                         self.send_to_vnf(sfc_id, data) 
-                        self.send_to_ids(data)
                     else:
                         logging.warning("Got data, but no SFC is UP!")
 
@@ -154,7 +153,6 @@ class Gateway:
 
 
     def send_to_ids(self, message):
-        logging.info("sending message to IDS!")
         if self.sniffing and self.ids_socket:
             try:
                 self.ids_socket.sendall(message)
