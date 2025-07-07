@@ -1,0 +1,49 @@
+{
+    "dataset": "kdd99",
+    "method": "if",
+    "if": {
+        "n_estimators": 100,
+        "max_features": 1.0,
+        "bootstrap": false,
+        "warm_start": false
+    },
+    "osvm": {
+        "kernel": "rbf",
+        "degree": 3,
+        "gamma": "scale",
+        "coef0": 0.0,
+        "tol": 0.001,
+        "nu": 0.5,
+        "shrinking": true,
+        "chache_size": 200,
+        "max_iter": -1
+    },
+    "lof": {
+        "n_neighbors": 20,
+        "algorithm": "auto",
+        "leaf_size": 30,
+        "metric": "minkowski",
+        "p": 2,
+        "contamination": "auto",
+        "novelty": false
+    },
+    "methods": {
+        "sfc-1": {
+            "dataset": "kdd99",
+            "method" : {
+                "method_name": "osvm",
+                "method_arguments": {
+                    "kernel": "rbf",
+                    "degree": 3,
+                    "gamma": "scale",
+                    "coef0": 0.0,
+                    "tol": 0.001,
+                    "nu": 0.5,
+                    "shrinking": true,
+                    "chache_size": 200,
+                    "max_iter": -1
+                }
+            }
+        }
+    }
+}

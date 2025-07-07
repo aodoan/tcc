@@ -1,0 +1,335 @@
+\chapter{Fundamentação}
+\label{cap:exemplos}
+\newcommand{\mycomment}[1]{}
+% figuras estão no subdiretório "figuras/" dentro deste capítulo
+\graphicspath{\currfiledir/figuras/}
+
+%=====================================================
+Este capítulo apresenta os conceitos fundamentais necessários para compreender o trabalho desenvolvido. Inicialmente, a Seção \ref{ml} aborda os principais conceitos e algoritmos de Aprendizado de Máquina. Em seguida, a Seção \ref{sec} discute aspectos da Segurança Computacional e apresenta um levantamento de dados coletados de 2024. A Seção \ref{nfv} detalha o paradigma NFV, a arquitetura NFV-MANO e conceitos da virtualização. Posteriormente, a Seção \ref{anml} é dedicada às técnicas de Detecção de Anomalias. Por fim, a Seção \ref{ids} trata dos Detectores de Intrusão, destacando seus métodos e aplicações.
+
+\section{Aprendizado de Máquina}
+\label{ml}
+Desde o inicio da Ciência da Computação, a maneira principal de resolver problemas era desenvolver algoritmos determinísticos programados de forma procedural. Porém, alguns problemas não eram escaláveis por possuírem grande complexidade \cite{Jiang2022}, o que deixava o problema não tratável para grandes entradas.
+
+Com a tarefa de resolver problemas complexos, se desenvolveu o campo da Inteligência Artificial (IA), e atualmente é um dos campos da computação com o maior número de avanços \cite{Effendy2017}. Uma das definições da área está na resolução de problemas de forma eficiente, procurando emular aspectos da inteligência humana através da utilização de algoritmos \cite{Sheikh2023}.
+
+Atualmente, um dos principais campos de pequisa dentro da área de IA é conhecido como Aprendizado de Máquina (\textit{Machine Learning} - ML), que estuda modelos computacionais capazes de aprender uma determinada tarefa, de acordo com entradas fornecidas \cite{Younes2024}. O termo aprendizado de máquina foi cunhado por Arthur Samuel, um pioneiro do campo de Inteligência Artificial. Segundo Samuel, é um campo de pesquisa que permite o computador aprender sem ser programado de forma explicita \cite{Samuel1959}.
+
+O processo do Aprendizado pode ser definido como a automatização e refinamento do processo de aprendizado sem a necessidade de programação \cite{R2021}. Esse processo tem como entrada dados que serão usados para treinamento da máquina, que cria modelos de aprendizados baseando-se neles e no método de implementação. É dado o nome de conjunto de treinamento para os dados usados pelos modelos, em busca de fazer inferência a outras instâncias fora do conjunto \cite{breiman2001}. A Figura \ref{fig:enter-label} mostra a principal diferença de paradigmas. No paradigma da programação clássica, é trabalho do humano obter as regras e dados do sistema, obtendo a resposta como saída. Já no paradigma de algoritmos de ML, é dado um conjunto de dados contendo as respostas (conhecidas como rótulos), com o objetivo de conhecer as regras internas do sistema estudado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{image.png}
+    \caption{Paradigma do Aprendizado de Máquina.}
+    \label{fig:enter-label}
+\end{figure}
+
+%Esse aprendizado é obtido através de um treinamento, ao invés de ser programado de forma explícita e procedural, como é na programação convencional.
+
+%Seu treinamento consiste em diversos exemplos relevante a sua tarefa, com o objetivo de encontrar uma análise estatística que o permitirá descobrir regras sobre o cenário estudado.
+
+
+\subsection{Métodos de treinamentos}
+\label{ml:met}
+De acordo com \citep{Zehra2023}, existem três principais abordagens com relação ao Aprendizado de Máquina, descritos a seguir.
+
+\textbf{Supervisionado.} No aprendizado supervisionado, um modelo é treinado com um conjunto de dados rotulados para aprender a inferir a respeito de novas entradas em diferentes categorias. Um exemplo de aprendizado supervisionado, é a classificação, que ao receber novos dados, o sistema compara com os padrões aprendidos e os classifica em um conjunto discreto de rótulos. Por exemplo, um algoritmo que classifique um \textit{e-mail} em \textit{spam} ou \textit{não-spam} ou classifique imagens como \textit{contém gato} ou \textit{não contém gato}. %Por exemplo, em detecção de anomalias, os dados podem ser categorizados como "normal" ou "anômalo". Outro exemplo seria um sistema de reconhecimento de e-mails que classifica mensagens como "spam" ou "não spam".
+    
+    %A regressão também é uma área de aprendizado supervisionado, onde a saída é um valor contínuo, e os modelos tentam prever novos valores. Com, por exemplo, projetar preços de empreendimentos imobiliários.
+
+    %\item No aprendizado não-supervisionado não é fornecido rótulos sobre o conjunto de dados, com o objetivo final de descobrir padrões no dado.
+\textbf{Não-supervisionado.} A entrada é um conjunto de dados não rotulados, com o objetivo de descobrir padrões escondidos, sem a necessidade de intervenção humana (por isso o nome, não-supervisionado). Um exemplo desse método é chamado de \textit{clustering}, onde é usado para agrupar instâncias baseadas em suas similaridades ou diferenças nos mesmos grupos (que por sua vez, são chamados de \textit{cluster}) \cite{Pitafi2023}.
+
+\textbf{Semi-supervisionado.} É um meio termo entre aprendizado supervisionado e semi-supervisionado. Em adição ao conjunto de dados sem rótulos, é dado informação supervisionada para um grupo de exemplos, mas não necessária para todas as possibilidades \cite{Chapelle2009}, muito usado quando a deseja que a inferência seja sobre somente um rótulo. Por exemplo, na detecção e segmentação de hemorragia intracraniana, abordagens semi-supervisionadas demonstraram desempenho superior em comparação com modelos supervisionados tradicionais \cite{Lin2024}, pois o conjunto de imagens rotuladas é significativo em relação ao conjunto total de amostras.
+
+%O modelo depende de um conjunto de dados rotulados (onde sua qualidade implica na precisão do modelo). Esses dados contém somente um rótulo, se o sistema coleta uma instância que não está de acordo com seu conjunto de dados, é considerado uma anomalia. Essa técnica não é capaz de identificar todos os tipos de anomalias \cite{Chiu2010}.
+    
+\subsection{Algoritmos de Aprendizado}
+\label{ml:alg}
+
+\section{Segurança Computacional}
+\label{sec}
+A computação é uma das tecnologias que mais mudaram a relação da sociedade, de forma que a maior parte de nossas informações estejam disponíveis online, sejam dados bancários, informações médicas, entre outras. Essa transformação atraí criminosos (que no contexto de segurança computacional são denominados atacantes) a desenvolverem métodos e ferramentas que visam subverter o sistema computacional para obter algum tipo de recompensa \citep{anderson2020security}.
+
+A segurança computacional é uma área de estudo que busca garantir a um sistema certas propriedades associadas às informações presentes nele \citep{maziero2020, anderson2020security}. A definição das propriedades podem ser diversas, a mais comum usada na literatura é o triângulo CIA (do inglês \textit{Confidentiality}, \textit{Integrity} e \textit{Disponibility}), definida em \cite{Amoroso94}, descritas a seguir.
+
+\textbf{Confidencialidade.} É uma propriedade na qual o sistema garante que uma informação só pode ser acessada por usuários que tenham a devida autorização.
+
+\textbf{Integridade.} Diz respeito a garantia que as informações só podem ser alteradas por usuários que tenham a devida autorização.
+
+\textbf{Disponibilidade.} Um certo recurso do sistema deve estar disponível para os usuários a qualquer momento.
+
+Uma vulnerabilidade surge a partir de um defeito no projeto, configuração ou implementação de um sistema que pode ser usado para violar algumas das propriedades de segurança do mesmo. Para o ato de explorar essas vulnerabilidades é dado o nome de ataque \cite{anderson2020security}. De acordo com \cite{Tiwari2022} todos os ataques a uma rede pode ser classificados em quatro grupos, descritos a seguir.
+
+\textbf{Negação de Serviço (\textit{Denial of Service} - DoS).} É um ataque que faz com que um recurso do sistema (seja processamento ou memória) seja sobrecarregado de forma com que o sistema não consiga oferecer o serviço para outros clientes. Todos esses ataques violam principalmente a disponibilidade.
+
+\textbf{Ataques \textit{Remote to User} (R2L).} É caracterizado quando um atacante explora vulnerabilidades para ganhar acesso de máquinas remotas e executar códigos arbitrários em sistemas ou servidores. Isso possibilita ao atacante obter total controle da máquina, roubar dados sensíveis e até mesmo usar o sistema invadido para realizar outros ataques. Ataques R2L violam a confidencialidade e podem violar a integridade.
+
+\textbf{Ataques \textit{User to Root} (U2R).} É quando um usuário não privilegiado obtêm acesso \textit{root} em um sistema que originalmente ele não possuía, violando uma propriedade de segurança do sistema. Ataques U2R violam a integridade e a confidencialidade.
+
+\textbf{\textit{Probing}.} É um método de coletar informações sobre uma rede ou sistema para identificar vulnerabilidades para serem exploradas futuramente. Essas informações podem ser, por exemplo, portas de conexões abertas, serviços, sistemas operacionais, entre outras. Geralmente violam apenas a confidencialidade.
+
+\section{Virtualização de Funções de Rede}
+\label{nfv}
+
+O conceito de Máquina Virtual (\textit{Virtual Machine} - VM) foi proposto nos anos 1960 pela IBM, com o objetivo de prover acesso à \textit{mainframes} de forma concorrente e iterativa para usuários. Cada VM era uma instância da máquina e oferecia ao usuário uma ilusão de acessar o próprio \textit{mainframe} diretamente \cite{nanda2005survey}.
+
+Na área da computação, um ambiente virtual pode ser acessado de maneira transparente pelas aplicações contidas nele, independente das infraestruturas subjacentes.
+
+Na área da computação, um ambiente virtual é visto como real pelas aplicações que nele estão rodando e pelo resto do mundo, mesmo com infraestruturas subjacentes totalmente diferentes. Essa conexão entre recursos físicos e virtuais é feita por uma camada de virtualização (e o processo por sua vez, recebe o nome de virtualização), que provê recursos de baixo nível para uma ou mais VMs. Essa camada geralmente é chamada de \textit{hypervisor} ou monitor (\textit{Virtual Machine Monitor} - VMM). Para o sistema operacional virtualizado, é dado o nome de \textit{guest system} \cite[p.~438]{maziero2020}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{virt.png}
+    \caption{fazer imagem comparacao recursos virtualizados}
+    \label{fig:enter-label}
+\end{figure}
+
+Ao passo em que diversas tecnologias de virtualização foram surgindo, Provedores de Serviços de Telecomunicações (TSPs) enfrentavam o desafio na mudança de suas operações, com o objetivo de fornecer serviço com alta banda, baixa latência, alta disponibilidade, escalabilidade e dinamicidade, em um mercado onde inovações estão ficando cada vez mais custosas e desafiadoras \cite{Han2015} \cite{Wu2015}.
+
+vantagens da virtualização
+
+%Redes essas que são composto por uma grande variedade de \textit{hardwares} dedicados. Isso, para provedores de internet, aumenta o custo operacional, %
+%A virtualização é uma tecnologia que cria uma abstração do \textit{hardware} físico e fornece recursos computacionais de clusters de servidores, armazenamento e conectividade para aplicações alto nível. 
+%
+%%
+\textit{Network Function Virtualization} (NFV) é um novo paradigma proposto em 2014 pelo \textit{European Telecommunications Standards Institute} (ETSI), tendo como motivação prover funções de rede (\textit{Network Functions} - NFs), que são ligadas a \textit{hardwares} dedicados, através de técnicas de virtualização, como VMs e \textit{containers}. Essas funções de rede recebem o nome de \textit{Virtualized Network Functions} (VNFs) \citep[p.~8]{nfv_whitepaper}. 
+
+%Para o conceito de encadear VNFs é dado o nome de \textit{Service Function Chains} (SFC) (chamado de \textit{VNF Forwarding Graph} (VNF-FG) no \textit{white paper} da ETSI). Através desta estratégia é possível aumentar a flexibilidade da rede, oferecendo diferentes serviços baseados nas necessidades dos usuários a partir da mesma infraestrutura. Também é possível alocar dinamicamente as SFCs, de acordo com a demanda atual da rede, diminuindo assim a energia gasta pelo sistema e aumentando sua escalabilidade
+
+A principal característica do paradigma NFV é a dissociação entre funções de rede (\textit{e.g.,} DHCP - ..., NAT - ... e \textit{Firewalls}) e hardwares dedicados, transformando a maneira como as redes são planejadas e implementadas. Com isso, o NFV traz benefícios como a redução de custos de capital (CapEx) e operacionais (OpEx), a diminuição no tempo de disponibilização de serviços (\textit{Time to Market}) e a redução no consumo de energia \citep{Mijumbi2016, Tipantuna2017, Hawilo2014}.
+
+Tradicionalmente, provedores de serviço dependem de \textit{middleboxes} para realizar as funções de rede para prover um determinado serviço \cite{10.5555/2228298.2228331}, no contexto NFV é possível representar um serviço como sendo uma série de VNFs conectadas. Esse conceito é conhecido como \textit{Service Function Chains} (SFC) (chamado de \textit{VNF Fowarding Graph} (VNF-FG) no \textit{white paper} da ETSI).  
+
+Através desta estratégia é possível aumentar a flexibilidade da rede, oferecendo diferentes serviços baseados nas necessidades dos usuários a partir da mesma infraestrutura. Também é possível alocar dinamicamente as SFCs \cite{Liu2017}, de acordo com a demanda atual da rede, diminuindo assim a energia gasta pelo sistema e aumentando sua escalabilidade
+
+Um grande número de soluções NFV são feitas tendo em mente as tecnologias 5G e IoT (\textit{Internet of Things}) que vem passando por uma revolução nos últimos anos, com o número de dispositivos chegando em bilhões \cite{Dhanalaxmi2017}, o que implica que uma grande quantidade de aplicações também serão necessária \cite{Yi2018}.
+
+% sugestão: Enquanto VNFs executam funções individuais de rede, serviços completos compostos por mais do que uma função podem ser criados a partir de uma SFC...
+%%
+
+\subsection{Arquitetura de Referência NFV-MANO}
+\label{nfv:arq}
+Uma das grandes motivações da adoção da NFV é a sua flexibilidade e possibilidades de mudanças. Para tanto, foi necessário criar uma arquitetura de referência chamada NFV-MANO pela ETSI em 2014, com o objetivo de padronizar implementações e permitir a interoperabilidade entre as soluções NFV. A arquitetura NFV-MANO é composta por três principais elementos: Infraestrutura NFV (\textit{NFV Infrastructure} - NFVI), o \textit{NFV Management and Orchestration} (NFV MANO), e as próprias Funções Virtuais de Rede (\textit{Virtual Network Functions} - VNFs) \citep{nfv_whitepaper}. Cada elemento é descrito em detalhes a seguir.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{nfv-arq.png}
+    \caption{Arquitetura de referência NFV MANO.}
+    \label{fig:enter-label}
+\end{figure}
+
+
+
+\textbf{NFVI.} É uma combinação de recursos incluindo \textit{hardware} e \textit{software} na qual as VNFs são instanciadas. Os recursos físicos podem incluir \textit{hardware commercial-off-the-shelf (COTS)} e armazenamento, que proveem processamento e conectividade para as VNFs. Recursos virtuais são abstrações de computação, armazenamento e redes, são realizadas usando uma camada de virtualização, que dissocia os recursos virtuais (para VNFs) dos recursos reais subjacentes. 
+
+\textbf{VNFs.} Uma NF é um bloco funcional dentro de uma infraestrutura de rede com interface externa e comportamento bem definidos \cite[p.~7]{etsi-nfv003}. Exemplos de NF são: funções de rede convencionais como DHCP, \textit{firewalls}, entre outros. Por sua vez, uma VNF é uma implementação de uma NF somente em \textit{software} que é instanciada utilizando recursos virtuais, como uma VM ou \textit{container}. Um serviço é oferecido por uma TSP e é composta por uma ou mais NFs. No caso da NFV, as NFs são virtualizadas e encadeadas, formando uma SFC. Para os usuários do serviço, o acesso deve ser totalmente transparente, seja o serviço baseado em NFs ou VNFs.
+%é uma implementação de uma NF baseado somente em \textit{software}. As VNF são instanciadas em VMs sobre uma NFVI.
+Colocar aqui VNFD etc
+
+\textbf{NFV \textit{MANagament and Ochestration} (NFV-MANO).} O MANO é descrito em \cite{etsi-manoarq} e é composto por três blocos funcionais: o \textit{Virtualized Infrastructure Manager} (VIM), NFV \textit{Orchestrator} (NFVO) e o VNF \textit{Manager} (VNFM), que são descritos a seguir.
+
+O VNFM é responsável pelo gerenciamento do ciclo de vida de uma VNF. Cada VNF é associada a um VNFM, e por sua vez, um VNFM pode gerenciar uma ou múltiplas VNFs \cite[p~.25]{etsi-manoarq}. É esperado que grande parte das funções sejam genéricas e aplicáveis para qualquer tipo de VNF, porém, a arquitetura NFV-MANO também deve ser capaz de prover requisitos específicos de VNFs.
+
+O VIM é responsável pelo controle e gerenciamento de recursos do NFVI. Um VIM pode ser especializado em gerenciar somente um recurso do NFVI (processamento, armazenamento ou rede) ou pode ser capaz de gerenciar múltiplos recursos \cite[p~.26]{etsi-manoarq}.
+
+Por fim, o NFVO tem duas responsabilidades principais: a orquestração dos recursos do NFVI para vários VIMs e gerenciamento do ciclo de vida dos serviços de rede. O NFVO também é responsável pela composição de VNFs para a criação de SFCs \cite[p~.24]{etsi-manoarq}. O NFVO também pode abrigar soluções visando aumentar aspectos de resiliência, segurança e flexibilidade \cite{8350296} \cite{Varvarigou03072024}.
+%%
+
+A arquitetura descrita anteriormente foi proposta como um conceito genérico -- logo, não foi projetado para nenhuma aplicação específica. Por isso, diversas implementações podem explorar mudanças fundamentais na implementação da NFV dependendo do contexto.
+%é responsável pelo gerenciamento e orquestração dos recursos do NFVI que são usados para suportar a infraestrutura na qual a virtualização acontece. Também, tem a responsabilidade de instanciar, escalar e fazer atualização durante o ciclo de vida de uma VNF. 
+
+
+%%
+
+%=====================================================
+
+\subsection{Segurança em NFV}
+\label{nfv:sec}
+%Segurança é definido como "a proteção contra a divulgação, destruição ou modificação indesejada de dados em um sistema e também a proteção dos próprios sistemas"\space e é uma coleção de técnicas, regras, políticas e práticas usado para garantir propriedades a um sistema \citep{valeriano2018}.
+
+%As vulnerabilidades podem ser definidas como defeitos na implementação ou no projeto de um sistema que permitem a um atacante violar uma ou mais de suas propriedades. Essas vulnerabilidades geram ameaças, que podem ser exploradas por ataques com o objetivo de obter uma recompensa do sistema vulnerável \citep{Abomhara2015}.
+
+%Os benefícios que acompanham a adoção de NFV também trazem uma série de desafios com relação a segurança, já que, ameaças e vulnerabilidades serão uma realidade para essas redes. Além da vulnerabilidade das próprias funções de rede (VNFs) e dos recursos físicos (servidores), também há a nova camada de \textit{software} (hypervisor, MANO, etc.) que podem ser alvo de ataques.
+Os benefícios que acompanham a adoção da NFV, trazem consigo um sério problema de segurança que implica em uma barreira para sua adoção \cite{Pattaranantakul2016} \cite{https://doi.org/10.17023/6fny-ta14}. Uma série de novos ataques serão introduzidos devido a maior possibilidade de vulnerabilidades em relação a funções de rede tradicionais baseadas em \textit{hardware}. Também a grande flexibilidade da NFV pode contribuir com novos problemas de segurança \cite{Pattaranantakul2018}. 
+
+%Essa dualidade permite que novas ameaças surjam especificamente no mundo de NFV \cite{ETSI_SEC_NFV}
+Ao combinar ameaças de redes e virtualização, abre espaço para uma nova área de possíveis vulnerabilidades, específicas para o contexto de NFV. Por isso, devem ser projetados mecanismos de defesa levando em conta especificamente este contexto \citep{ETSI_SEC_NFV}.
+
+%=====================================================
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\linewidth]{nfv-specific-threats.png}
+    \caption{Figura de possíveis ameaças.}
+    \label{fig:enter-label}
+\end{figure}
+
+%=====================================================
+%\subsection{Desafios na Detecção de Anomalias}
+\newpage
+\section{Detecção de Anomalias}
+\label{anml}
+\label{anml:desafios}
+A área de estudo de Detecção de Anomalias tem como o principal problema encontrar padrões no dado que não são correspondem ao comportamento esperado \space \citep{Chandola2009}. Esse campo de estudo tem sido investigado há séculos e possui aplicações em diversas áreas, como detecção de fraudes bancárias, monitoramento de condições médicas, meteorologia, entre outras.
+
+Detectar anomalias é importante em contextos onde dados não protegidos ou fora do esperado podem causar riscos. No contexto de fraudes bancárias, por exemplo, a identificação de uma transação incomum pode alertar as autoridades sobre uma possível fraude fiscal.
+
+%A definição de anomalia se baseia em um comportamento esperado, que pode ser definido usando diversas técnicas. Dessa forma, qualquer instância fora da região, é considerado uma anomalia.
+
+Surgem diversas dificuldades para se obter o comportamento esperado, como por exemplo, a complexidade de definir uma região contendo todas as instâncias esperadas. Diversas instâncias poderão estar próximo a borda do comportamento esperado, por isso, erros podem ocorrer. Outra questão e que quando uma anomalia surge de uma ação maliciosa, o responsável pode tentar simular um comportamento comum, com o objetivo de não levantar suspeitas. Um comportamento esperado pode variar ao longo do tempo, onde um comportamento esperado no momento atual, pode não ser revelante no futuro
+
+Dado os desafios listados pelo problema de detectar anomalias geralmente é uma tarefa complexa, logo, grande parte das técnicas se propõem a resolver um problema específico, já que diversos fatores podem alterar dependendo do cenário \cite{Chandola2009}, com por exemplo, a natureza do dado, disponibilidade de dados, tipos de anomalia para ser detectado entre outras. Conceitos de ML, teoria da informação e mineração de dados são usados amplamente para desenvolver técnicas de detecção de anomalias.
+%Em alguns casos, o comportamento esperado pode variar ao longo do tempo, onde um comportamento esperado no momento atual, pode não ser revelante no futuro. Por isso, técnicas de detecção de anomalias precisam levar em conta o contexto em que são aplicadas,
+%Precisamos então, utilizar técnicas com o objetivo de definir um comportamento esperado do dado. Dessa forma, qualquer instância fora da região, é considerado uma anomalia. 
+\mycomment{
+\begin{itemize}
+    \item Definir uma região contendo todas as instâncias esperadas pode ser uma tarefa complexa. Diversas instâncias poderão estar próximo a borda do comportamento esperado, por isso, erros podem ocorrer.
+    \item Quando a anomalia resulta de uma ação maliciosa, o responsável pode tentar simular um comportamento normal com o objetivo de evitar a detecção e não levantar suspeitas.
+    \item Em certos ambientes, o comportamento esperado pode evoluir ao longo do tempo. Onde um comportamento esperado no momento atual, pode não ser revelante no futuro.
+    \item A própria natureza dos dados podem gerar anomalias (medição com ruídos ou indisponibilidade de dados).
+\end{itemize}
+
+Dado os desafios listados, detectar anomalias não é uma tarefa simples, e requer um planejamento específico de acordo com a natureza do problema observado.
+}
+
+\subsection{Tipos de anomalias}
+\label{anml:def}
+Como mencionado na seção anterior, entender a natureza da anomalia é um aspecto importante na escolha da técnica a ser utilizada. Em \cite{Chandola2009}, anomalias podem ser classificadas nas seguintes categorias.
+
+\textbf{Anomalia de Ponto.} Acontece quando uma única instância do dado pode ser considerado anômalo em relação ao dado. É a forma mais simples de anomalia.
+
+\textbf{Anomalia contextual.} Se em um contexto um dado é anômalo, mas em outro não. Essa noção de contexto é dada pela relação dos atributos contextuais e comportamentais. Atributos contextuais são usados para definir o contexto (vizinhança) de uma instância, por exemplo, latitude e longitude para dados meteorológicos. Já atributos comportamentais são as características não contextuais de uma instância, no caso de dados meteorológicos por exemplo, uma quantidade de chuva em uma localização especifica.
+
+\textbf{Anomalia coletiva.} Ocorre quando uma coleção de instâncias relacionadas são anômalas em comparação ao conjunto de dados. As instâncias em si não representam anomalias de ponto, porém a ocorrência em conjunto com outras instâncias é.
+
+Anomalias de ponto podem ocorrer em qualquer conjunto de dados, já anomalias coletivas só podem ocorrer em casos onde as instâncias podem ser relacionadas. Uma outra propriedade é que anomalias de ponto e coletivas podem ser tradadas como anomalias de contexto caso haja um contexto para ser analisado. A Figura \ref{fig:tipos-anomalias} ilustra as diferenças das três anomalias.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{2-fundam/anomalias.png}
+    \caption{Tipos de anomalias.}
+    \label{fig:tipos-anomalias}
+\end{figure}
+
+\subsection{Detecção de Anomalias com Aprendizado de Máquina}
+\label{anml:ml}
+
+\section{Detecção de Intrusão}
+\label{ids}
+Informações sensíveis disponíveis \textit{online} são constantemente alvo de criminosos que buscam obter acesso a dados de forma ilegal \citep[p.~35]{anderson2020security}. Uma intrusão ocorre quando atacantes fabricam pacotes maliciosos para um usuário, visando roubar ou modificar dados confidenciais por meio de falhas na arquitetura ou na implementação da rede \citep{Kunal2019}.
+
+Um Sistema de Detecção de Intrusão (\textit{Intrusion Detection Sytsem} - IDS) é definido como uma tecnologia de segurança, que pode detectar, prevenir e reagir à atividades maliciosas, através de monitoramento dinâmico da rede, e análise dos dados obtidos, complementando a análise estática de \textit{firewalls} \citep{Patcha2007}. O seu funcionamento é em modo promíscuo (informalmente conhecido como \textit{sniffer} de rede), definindo se o tráfego capturado é, de acordo com suas regras internas, malicioso ou não, e ao detectar, o sistema alerta o administrador.
+
+%O IDS funciona em modo promíscuo (informalmente conhecido como \textit{sniffer} de rede), definindo se o tráfego analisado é, de acordo com suas regras internas, malicioso ou não, e ao detectar, o sistema alerta o administrador.
+
+%Os algoritmos de detecção podem usar uma série de algoritmos para basear sua análise, como por exemplo, métodos estátisticos sobre certas métricas (quantidade de banda, uso dos recursos). Ao criar um "perfil" do comportamento padrão da rede, qualquer comportamento fora de uma margem desse perfil, é caracterizado como uma anomalia.
+
+%A principal vantagem dessa abordagem é que não é necessário qualquer conhecimento sobre os ataques, como os famosos \textit{zero day} podem ser detectados. A sua principal dificuldade é encontrar o balanço entre ter muitos falso positivos (pacotes que são maliciosos, e não detectados) e falso negativos (pacotes que não são maliciosos, e são detectados). 
+
+\subsection{Arquitetura de um Detector de Intrusão}
+\label{ids:arq}
+A Figura \ref{fig:ids-arq} apresenta a arquitetura generalizada de um IDS proposta em \citep{Axelsson2000}. Linhas sólidas indicam o fluxo de dados e linhas pontilhadas indicam resposta a uma atividade intrusiva. Os módulos da arquitetura são descritos a seguir.
+%Em um dos trabalhos mais citados na área de Detecção de Intrusão \cite{Axelsson2000}, é proposta uma arquitetura genérica tendo os seguintes componentes:
+\begin{figure}[tbh!]
+    \centering
+    \includegraphics[width=0.7\linewidth]{ids-arc.png}
+    \caption{Organização de um Detector de Intrusão}
+    \label{fig:ids-arq}
+\end{figure}
+
+%todo gerar imagem e traduzir os nomes
+
+\textbf{\textit{Audit data collection.}} Módulo usado na coleta de dados para serem analisados pelo IDS, com o objetivo de encontrar pacotes maliciosos. Esses dados podem ser de diversas origens, tipicamente, atividade de rede e do próprio usuário são usados.
+
+\textbf{\textit{Audit storage.}} É onde são armazenados os dados coletados, seja de forma indefinida (ou por um longo período de tempo (meses ou anos) ou temporária. A quantidade de dados geralmente é extremamente volumosa, por isso, uma etapa da implementação de um IDS e definir qual é o tempo de vida na qual o dado coletado é relevante.
+
+\textit{\textbf{Processing}.} O coração de um IDS, é nele onde os algoritmos são implementados. Na literatura é comum dividir em três abordagens (descritos na seção \ref{ids:tipos}): detecção por assinatura, detecção de anomalia e a detecção híbrida.
+
+\textit{\textbf{Configuration Data.}} O módulo que contém as informações mais sensíveis do detector. Como e onde realizar a coleta de dados, como responder a intrusões, entre outros. É nele o módulo no qual o operador de rede interage com o detector.
+
+\textit{\textbf{Reference data.}} É onde os dados de assinatura de ataques são armazenados (no caso de detecção por assinatura) ou o perfil de comportamentos esperados (no caso de detecção por anomalias). 
+
+\textbf{\textit{Active/processing data.}} É onde o módulo de processamento armazena resultados intermediários, como por exemplo, informações sobre assinaturas de intrusão parcialmente correspondidas.
+
+\textbf{\textit{Alarm.}} Módulo responsável por realizar a saída do sistema, quando uma intrusão é detectada, uma notificação é enviada ao responsável. Esse módulo pode ser responsável por realizar uma filtro nas intrusões detectadas, visando diminuir a taxa de falsos negativos.
+
+\subsection{Abordagens na Implementação de Detectores de Intrusão}
+\label{ids:tipos}
+As diferentes implementações diferem em relação a diversas funcionalidades dos detectores. A principal é com relação de como é feita a classificação de tráfego intrusivo e não-intrusivo. As três principais abordagens são:
+
+
+\textbf{Detecção de Anomalias.} O sistema reage de acordo com um algoritmo interno de detecção de anomalias. É necessário um período onde é criado um padrão comportamental das entidades. Após isso, uma atividade que foge desse padrão criado é tratado como uma possível intrusão. A sua maior vantagem é o fato de detectar ataques desconhecidos (dentre eles, os conhecidos \textit{ataques "zero day"}).    
+Uma grande desvantagem se deve ao fato do período inicial onde o sistema não está protegido. Outra questão, assim como citado na Seção \ref{anml:desafios}, criar um comportamento esperado pode ser complexo, levando a um grande número de alarmes falsos.
+
+\textbf{Detecção baseada em assinatura.} É uma técnica que consiste em um banco de dados de ataques conhecidos. Ao buscar padrões específicos, caso a assinatura de uma atividade na rede corresponda à de um ataque conhecido, uma intrusão será alertada. A sua principal vantagem é que ataques conhecidos são detectados com uma grande confiabilidade. Outro benefício é que o detector começa a proteger e detectar a rede imediatamente após sua implantação, não sendo necessário passar por uma fase de treinamento.
+
+A sua grande desvantagem reside no seu conjunto de dados: se um ataque não estiver registrado, não é acionado nenhum alarme. Isso requer constante atualização no conjunto de dados para manter o banco de dados relevante.
+
+\textbf{Híbrido.} Ambas estrategias previamente citadas possuem vantagens e desvantagens que são complementares e diversos trabalhos são feitos utilizando as duas técnicas \cite{Patcha2007}.
+Em um detector híbrido, é necessário dois \textit{Processing elements} e dois conjuntos de \textit{configuration data} (a mesma lógica aplica para $n$ detectores). O mecanismo de alarme deve fazer uma decisão baseada nas saídas de cada um dos módulos de detecção, levando vários fatores em consideração.
+
+
+\subsection{Premissa na Detecção de Anomalias}
+\label{ids:prem}
+A principal premissa da detecção de anomalias em detecção de intrusão é que uma atividade intrusiva é um subconjunto de atividades anômalas \cite{purdue} (no caso ideal, o conjunto de atividades intrusiva seria igual o conjunto de anomalias). Para isso, surgem  diversos problemas já levantados nas seções anteriores, já que o funcionamento correto do IDS está ligado diretamente dessas dificuldades. Em \cite{purdue} são criados quatro possibilidades a respeito das atividade e possíveis classificações:
+
+
+\textbf{Intrusiva mas não anômala.} Serão falso negativos (FN), o sistema falha em detectar uma intrusão pois ela não foi acusada como uma anomalia. 
+
+%Isso pode ser resolvido utilizando a técnica baseada em assinatura, ou modelar o conjunto esperado de forma diferente.
+
+\textbf{Não intrusiva mas anômala.} Serão falso positivos (FP), mesmo a atividade não sendo intrusiva, por ser anômala, 
+é alertado como intrusão.
+
+\textbf{Não intrusiva e não anômala.} Serão verdadeiros negativos (VN), a atividade não é anômala e nem é intrusiva, logo não será gerado nenhum alerta.
+
+\textbf{Intrusiva e anômala.} Serão verdadeiros positivos (VP), a atividade será acusada de intrusiva de forma correta pois é anômalo.
+
+Redução de falsos negativos e falsos positivos é uma área importante de pesquisa, tendo em vista que eles tem um grande impacto na segurança das redes \cite{Kunal2019}. Baseando-se nessas métricas, podemos utilizá-las e definir três conceitos: Acurácia, Taxa de Detecção de Ataque e Taxa de Alarmes Falsos, descrito pelas equações \ref{eq:acuracia}, \ref{eq:taxa} e \ref{eq:alarme}, respectivamente.
+
+%Podemos definir precisão e completude das seguintes formas
+% usando novas definicioes
+\mycomment{
+\begin{equation}
+    \text{Precisão} = \frac{VP}{VP + FP}
+    \label{eq:precisao}
+\end{equation}
+
+\begin{equation}
+    \text{Completude} = \frac{VP}{VP + FN}    
+    \label{eq:completude}
+\end{equation}
+}
+\begin{equation}
+    \text{Acurácia} = \frac{VP + VN}{VP + VN + FP + FN}
+    \label{eq:acuracia}
+\end{equation}
+
+\begin{equation}
+    \text{Taxa de Detecção de Ataque} = \frac{VP}{VP + VN}
+    \label{eq:taxa}
+\end{equation}
+
+\begin{equation}
+    \text{Taxa de Alarmes Falsos} = \frac{FP}{FP + VN}
+    \label{eq:alarme}
+\end{equation}
+
+Através do módulo \textit{Configuration} (descrito na seção \ref{ids:arq}), o operador pode ajustar os valores de decisão do IDS com o objetivo de favorecer uma métrica. Por exemplo, o sistema pode ser configurado para ter uma redução na taxa de alarmes falsos (fazer com que menos atividades legitimas sejam caracterizadas como intrusivas) -- isso influenciará diretamente a taxa de detecção de ataques (mais atividades intrusivas serão dadas como legitimas).
+
+%Quando queremos aumentar a completude (aumentar a quantidade de intrusões detectadas), podemos definir os limites de acordo com a necessidade. Isso resulta em uma degradação da precisão (um maior número de atividades inofensivas serão dadas como intrusas). 
+
+\subsection{Detecção de Intrusão em NFV}
+\label{ids:nfv}
+Podemos usar técnicas de detecção de anomalia para encontrar comportamentos que podem comprometer a segurança do sistema. Existe um grande número de cenários que podem gerar anomalias, entre eles
+\begin{itemize}
+    \item Uma falha em um componente crítico (seja \textit{hardware} ou \textit{software}), pode causar uma degradação na performance.
+    \item Acesso de usuários não autorizados, fraco monitoramento, não detecção de eventos ou interrupções, causam comportamentos anômalos.
+    \item Quando o sistema é sujeito à um grande número de tráfego (legítimo), onde vários usuários não maliciosos tentam acessar o servidor, criando um tráfego anômalo.
+\end{itemize}
+
+
+
+
+%=====================================================

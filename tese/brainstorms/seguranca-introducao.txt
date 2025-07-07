@@ -1,0 +1,59 @@
+parte de seguranca:
+0) falar um pouco sobre o que é:
+
+A segurança é uma série de políticas que garantem a integradidade do sistema i.e: previnir acesso não autorizado, modificação de dados,
+negação de serviço (DoS), entre outros.
+Dizemos que a segurança de um sistema foi comprometido, quando um dos pilares da segurança é quebrado, as principais são:
+Confindecialidade: somente usuários autorizados podem acessar o recurso
+Integridade: o recurso do sistema só pode ser alterado por usuários autorizados
+Disponibilidade: o rucerso do sitema deve estar disponível a qualquer momento
+
+Outro autores também considream Autenticidade e Não-Repudio
+
+
+0.5) Falar sobre vulnerabilidades e ataques?
+- Firewall
+
+1) IDS
+  I - explicar o pq ele foi criado
+  (colocar dado de quantas CVE`s foram descobertas) ... ->, isso sugere que as redes poderão estar em um lugar inseguro, levando em conta a grande quantidade
+  de diferentes ataques que podem ser feitos.
+  
+  Esse ambiente, desenvolveu o campo de estudos em Detecção de intrusão (IDS) (que tem o mesmo funcionamento de um alarme em uma casa) <- talvez deixar isso?
+  
+  II - Ideia básica 
+  Um IDS funciona (como um sniffer de rede,) analisando informação do tráfego e buscando identificar comportamentos que podem compremeter a segurança de um sistema
+
+  III - aprofundamento
+
+  (1) talvez explicar a arquitetura de um IDS? 
+    TBD
+
+
+  (2) falar sobre: anomalia por assinatura, ou por função matemática
+    Existem duas estrátegias para implementar um IDS, são elas:
+    - Assinaturas: 
+      Onde o Detector tenta encontrar padrões no tráfego de rede. É necessário um Banco de Dados constamente atualizados com ataques para serem detectados, já que ataques
+      não catalogados não gerarão alarmes.
+
+    - Anomalias:
+      O Detector identifica tráfego que não é conforme com o comportamento "normal" da rede. A maior vantagem é que ataques desconhecidos também serão detectados, já que 
+      não precisam ser mantidos em um banco de dados. (Essa criação de perfil pode variar de rede para rede, e para o atacante, fica dificil etc). As principais desvantagem
+      são: o sistema precisa ir por um periodo de "treinamento", onde é criado o perfil da rede, e dependendo dos parametros, uma grande taxa de erro pode acontecer
+
+  - Falar sobre ML + IDS
+
+
+2) Seguranca em NFV 
+
+
+  (0) Incetivar o pq é importante
+    NFV é um passo importante na evolução das redes, dado seus diversos benefícios. Porém, ao migrarmos nossa tecnologia, problemas surgirão,
+    dentre eles: segurança, performance, disponibilidade e entre outros.
+    
+    Uma outra questão importante é que serão introduzidos novas tecnologias com a adoção da NFV, trazendo mais espaço para vulnerabilidades.
+    Além da "softwarização" das funções de rede, hypervisores e a própria infraesturua da NFV (MANO)  são pontos críticos para a rede.
+    
+  (1) Falar sobre o módulo de Seguraça proposto ??
+
+

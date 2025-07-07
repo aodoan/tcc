@@ -1,0 +1,45 @@
+0) Pequena introducao:
+Cada vez mais, a quantidade de dados vem aumentando por parte dos usuários [colocar dados], provedores de infraestrutura de telecomunicações devem investir em equipamentos
+para acompanhar essa alta demanda, o que leva a um grande custo operacional [ colocar dados aqui de quanto pode economizar ]
+
+1) explicar o que é:
+																														  -- achar um termo melhor --
+A ideia central é transferir funções de rede (NF) (exemplos aqui) de hardwares proprietários para serem virtualizadas (VNF) como softwares que podem ser
+rodados em COTS (servers de proposito geral, datacenters, ambientes em nuvem).
+
+A "softwareização" da rede proporciona:
+--->
+
+2) vantagens:
+ 	(isso veio do nfv_white_paper
+	1) Quando ocorre a "softwarização", isso faz com que o hardware não seja mais proprietário e especifico. Fazendo com que toda a operação da rede
+	possa ocorrer com COTS (commodity-off-the-shelf).
+		desvantagens redes baseadas em hardware: 
+			- chegam cedo no fim de vida útil, e com o avanço de diversas tecnologias evoluindo rápido, tendem a ficar menor
+			- são mais caras de manter e requerem profissionais capacitados 
+	
+	2) Também tem a capacidade de reduzir custos operacionais (OPEX), provendo uma grande flexibilidade no deploy das funções, além de uma facilidade
+	maior com testes e migrações de tecnologias.
+  -> Do Bondan: "customers demand can be individually consireden and dynamically adjusted trough a chain of NFV, called Service Function Chain"
+  - A mesma infraestrutura pode oferecer diversos serviços dependendo dos usuários, ao encadear VNF's, teremos fluxos de execução. Isto é chamado de 
+  SFC (ou NFV-Forwading graph, como é chamado no ETSI)
+
+
+3) drawbacks
+	1) performance
+
+	2) segurança!!!
+		Dentro dos desafios gerados pelo mundo das redes NFV, segurança é uma grande área de pesquisa. A camada de software possibilita mais um campo
+		para possíveis vulnerabilidades.
+
+2) arquitetura da NFV
+NFV são implementadas como entidades em cima de NFVI (NFV Infrastrucutre).
+
+VNF: A implementação de uma NF (network function) que é virtualizada (VNF)
+
+NFV Infrastrcuture (NFVI): diversas tecnologias que fornecem recursos na qual suporta a execução de VNFs
+
+NFV Management and Orchestration (NFV MANO): Responsavel pelo gerenciamento de recursos que suportam a virtualização, e também do ciclo de vida das VNFs.
+
+
+

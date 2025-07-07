@@ -1,0 +1,1014 @@
+{
+    "start_at": "2025-06-22 16:17:03",
+    "finish_at": "2025-06-22 23:19:47",
+    "runtime": "7:02:44.714404",
+    "training_time": "0:00:00.937552",
+    "runs": 100,
+    "method": "iforest",
+    "arguments": {
+        "max_samples": 100,
+        "random_state": 4
+    },
+    "info": {
+        "run_1": {
+            "n_packages": 2501,
+            "accuracy": 0.7940823670531787,
+            "detection_rate": 0.7955689828801611,
+            "false_alarm": 0.16288659793814433,
+            "t_positives": 1580,
+            "t_negatives": 406,
+            "f_positives": 79,
+            "f_negatives": 436
+        },
+        "run_2": {
+            "n_packages": 2501,
+            "accuracy": 0.7916833266693323,
+            "detection_rate": 0.793939393939394,
+            "false_alarm": 0.15352697095435686,
+            "t_positives": 1572,
+            "t_negatives": 408,
+            "f_positives": 74,
+            "f_negatives": 447
+        },
+        "run_3": {
+            "n_packages": 2501,
+            "accuracy": 0.7920831667333067,
+            "detection_rate": 0.7839475012619889,
+            "false_alarm": 0.15913555992141454,
+            "t_positives": 1553,
+            "t_negatives": 428,
+            "f_positives": 81,
+            "f_negatives": 439
+        },
+        "run_4": {
+            "n_packages": 2501,
+            "accuracy": 0.7916833266693323,
+            "detection_rate": 0.8080808080808081,
+            "false_alarm": 0.16483516483516483,
+            "t_positives": 1600,
+            "t_negatives": 380,
+            "f_positives": 75,
+            "f_negatives": 446
+        },
+        "run_5": {
+            "n_packages": 2501,
+            "accuracy": 0.7772890843662535,
+            "detection_rate": 0.7916666666666666,
+            "false_alarm": 0.1544885177453027,
+            "t_positives": 1539,
+            "t_negatives": 405,
+            "f_positives": 74,
+            "f_negatives": 483
+        },
+        "run_6": {
+            "n_packages": 2501,
+            "accuracy": 0.7848860455817673,
+            "detection_rate": 0.7941925624044829,
+            "false_alarm": 0.1530398322851153,
+            "t_positives": 1559,
+            "t_negatives": 404,
+            "f_positives": 73,
+            "f_negatives": 465
+        },
+        "run_7": {
+            "n_packages": 2501,
+            "accuracy": 0.7920831667333067,
+            "detection_rate": 0.8006057546693589,
+            "false_alarm": 0.15778251599147122,
+            "t_positives": 1586,
+            "t_negatives": 395,
+            "f_positives": 74,
+            "f_negatives": 446
+        },
+        "run_8": {
+            "n_packages": 2501,
+            "accuracy": 0.8020791683326669,
+            "detection_rate": 0.7981056829511466,
+            "false_alarm": 0.13646055437100213,
+            "t_positives": 1601,
+            "t_negatives": 405,
+            "f_positives": 64,
+            "f_negatives": 431
+        },
+        "run_9": {
+            "n_packages": 2501,
+            "accuracy": 0.7996801279488205,
+            "detection_rate": 0.7865,
+            "false_alarm": 0.12320328542094455,
+            "t_positives": 1573,
+            "t_negatives": 427,
+            "f_positives": 60,
+            "f_negatives": 441
+        },
+        "run_10": {
+            "n_packages": 2501,
+            "accuracy": 0.8028788484606157,
+            "detection_rate": 0.7923306772908366,
+            "false_alarm": 0.15071283095723015,
+            "t_positives": 1591,
+            "t_negatives": 417,
+            "f_positives": 74,
+            "f_negatives": 419
+        },
+        "run_11": {
+            "n_packages": 2501,
+            "accuracy": 0.8152738904438225,
+            "detection_rate": 0.7788131436978911,
+            "false_alarm": 0.13102119460500963,
+            "t_positives": 1588,
+            "t_negatives": 451,
+            "f_positives": 68,
+            "f_negatives": 394
+        },
+        "run_12": {
+            "n_packages": 2501,
+            "accuracy": 0.7892842862854859,
+            "detection_rate": 0.7847011144883486,
+            "false_alarm": 0.1396761133603239,
+            "t_positives": 1549,
+            "t_negatives": 425,
+            "f_positives": 69,
+            "f_negatives": 458
+        },
+        "run_13": {
+            "n_packages": 2501,
+            "accuracy": 0.7944822071171531,
+            "detection_rate": 0.7775541016607952,
+            "false_alarm": 0.1350293542074364,
+            "t_positives": 1545,
+            "t_negatives": 442,
+            "f_positives": 69,
+            "f_negatives": 445
+        },
+        "run_14": {
+            "n_packages": 2501,
+            "accuracy": 0.788484606157537,
+            "detection_rate": 0.7849898580121704,
+            "false_alarm": 0.15030060120240482,
+            "t_positives": 1548,
+            "t_negatives": 424,
+            "f_positives": 75,
+            "f_negatives": 454
+        },
+        "run_15": {
+            "n_packages": 2501,
+            "accuracy": 0.7960815673730508,
+            "detection_rate": 0.7890507282772476,
+            "false_alarm": 0.12133891213389121,
+            "t_positives": 1571,
+            "t_negatives": 420,
+            "f_positives": 58,
+            "f_negatives": 452
+        },
+        "run_16": {
+            "n_packages": 2501,
+            "accuracy": 0.7828868452618952,
+            "detection_rate": 0.7992849846782432,
+            "false_alarm": 0.16913319238900634,
+            "t_positives": 1565,
+            "t_negatives": 393,
+            "f_positives": 80,
+            "f_negatives": 463
+        },
+        "run_17": {
+            "n_packages": 2501,
+            "accuracy": 0.7916833266693323,
+            "detection_rate": 0.795959595959596,
+            "false_alarm": 0.1530398322851153,
+            "t_positives": 1576,
+            "t_negatives": 404,
+            "f_positives": 73,
+            "f_negatives": 448
+        },
+        "run_18": {
+            "n_packages": 2501,
+            "accuracy": 0.7828868452618952,
+            "detection_rate": 0.7701736465781409,
+            "false_alarm": 0.13793103448275862,
+            "t_positives": 1508,
+            "t_negatives": 450,
+            "f_positives": 72,
+            "f_negatives": 471
+        },
+        "run_19": {
+            "n_packages": 2501,
+            "accuracy": 0.8092762894842063,
+            "detection_rate": 0.7845849802371542,
+            "false_alarm": 0.14003944773175542,
+            "t_positives": 1588,
+            "t_negatives": 436,
+            "f_positives": 71,
+            "f_negatives": 406
+        },
+        "run_20": {
+            "n_packages": 2501,
+            "accuracy": 0.7980807676929228,
+            "detection_rate": 0.7805611222444889,
+            "false_alarm": 0.1377952755905512,
+            "t_positives": 1558,
+            "t_negatives": 438,
+            "f_positives": 70,
+            "f_negatives": 435
+        },
+        "run_21": {
+            "n_packages": 2501,
+            "accuracy": 0.7896841263494602,
+            "detection_rate": 0.7949367088607595,
+            "false_alarm": 0.17177914110429449,
+            "t_positives": 1570,
+            "t_negatives": 405,
+            "f_positives": 84,
+            "f_negatives": 442
+        },
+        "run_22": {
+            "n_packages": 2501,
+            "accuracy": 0.7900839664134346,
+            "detection_rate": 0.7965587044534413,
+            "false_alarm": 0.1711340206185567,
+            "t_positives": 1574,
+            "t_negatives": 402,
+            "f_positives": 83,
+            "f_negatives": 442
+        },
+        "run_23": {
+            "n_packages": 2501,
+            "accuracy": 0.790483806477409,
+            "detection_rate": 0.7936267071320182,
+            "false_alarm": 0.16393442622950818,
+            "t_positives": 1569,
+            "t_negatives": 408,
+            "f_positives": 80,
+            "f_negatives": 444
+        },
+        "run_24": {
+            "n_packages": 2501,
+            "accuracy": 0.8012794882047181,
+            "detection_rate": 0.7869261477045908,
+            "false_alarm": 0.15445544554455445,
+            "t_positives": 1577,
+            "t_negatives": 427,
+            "f_positives": 78,
+            "f_negatives": 419
+        },
+        "run_25": {
+            "n_packages": 2501,
+            "accuracy": 0.7812874850059977,
+            "detection_rate": 0.7958034800409417,
+            "false_alarm": 0.16701461377870563,
+            "t_positives": 1555,
+            "t_negatives": 399,
+            "f_positives": 80,
+            "f_negatives": 467
+        },
+        "run_26": {
+            "n_packages": 2501,
+            "accuracy": 0.7852858856457418,
+            "detection_rate": 0.7841140529531568,
+            "false_alarm": 0.14859437751004015,
+            "t_positives": 1540,
+            "t_negatives": 424,
+            "f_positives": 74,
+            "f_negatives": 463
+        },
+        "run_27": {
+            "n_packages": 2501,
+            "accuracy": 0.7892842862854859,
+            "detection_rate": 0.790273556231003,
+            "false_alarm": 0.16363636363636364,
+            "t_positives": 1560,
+            "t_negatives": 414,
+            "f_positives": 81,
+            "f_negatives": 446
+        },
+        "run_28": {
+            "n_packages": 2501,
+            "accuracy": 0.7812874850059977,
+            "detection_rate": 0.7840327533265097,
+            "false_alarm": 0.17254901960784313,
+            "t_positives": 1532,
+            "t_negatives": 422,
+            "f_positives": 88,
+            "f_negatives": 459
+        },
+        "run_29": {
+            "n_packages": 2501,
+            "accuracy": 0.7940823670531787,
+            "detection_rate": 0.7935548841893253,
+            "false_alarm": 0.16835699797160245,
+            "t_positives": 1576,
+            "t_negatives": 410,
+            "f_positives": 83,
+            "f_negatives": 432
+        },
+        "run_30": {
+            "n_packages": 2501,
+            "accuracy": 0.8052778888444622,
+            "detection_rate": 0.7869910625620655,
+            "false_alarm": 0.11363636363636363,
+            "t_positives": 1585,
+            "t_negatives": 429,
+            "f_positives": 55,
+            "f_negatives": 432
+        },
+        "run_31": {
+            "n_packages": 2501,
+            "accuracy": 0.7980807676929228,
+            "detection_rate": 0.7880761523046093,
+            "false_alarm": 0.13673469387755102,
+            "t_positives": 1573,
+            "t_negatives": 423,
+            "f_positives": 67,
+            "f_negatives": 438
+        },
+        "run_32": {
+            "n_packages": 2501,
+            "accuracy": 0.8096761295481807,
+            "detection_rate": 0.7896296296296297,
+            "false_alarm": 0.13238289205702647,
+            "t_positives": 1599,
+            "t_negatives": 426,
+            "f_positives": 65,
+            "f_negatives": 411
+        },
+        "run_33": {
+            "n_packages": 2501,
+            "accuracy": 0.7832866853258696,
+            "detection_rate": 0.7881572230729964,
+            "false_alarm": 0.14432989690721648,
+            "t_positives": 1544,
+            "t_negatives": 415,
+            "f_positives": 70,
+            "f_negatives": 472
+        },
+        "run_34": {
+            "n_packages": 2501,
+            "accuracy": 0.7992802878848461,
+            "detection_rate": 0.7928964482241121,
+            "false_alarm": 0.14285714285714285,
+            "t_positives": 1585,
+            "t_negatives": 414,
+            "f_positives": 69,
+            "f_negatives": 433
+        },
+        "run_35": {
+            "n_packages": 2501,
+            "accuracy": 0.7800879648140744,
+            "detection_rate": 0.7929267042542286,
+            "false_alarm": 0.15481171548117154,
+            "t_positives": 1547,
+            "t_negatives": 404,
+            "f_positives": 74,
+            "f_negatives": 476
+        },
+        "run_36": {
+            "n_packages": 2501,
+            "accuracy": 0.7944822071171531,
+            "detection_rate": 0.7951685958731757,
+            "false_alarm": 0.12473118279569892,
+            "t_positives": 1580,
+            "t_negatives": 407,
+            "f_positives": 58,
+            "f_negatives": 456
+        },
+        "run_37": {
+            "n_packages": 2501,
+            "accuracy": 0.7912834866053579,
+            "detection_rate": 0.7776654876200101,
+            "false_alarm": 0.16666666666666666,
+            "t_positives": 1539,
+            "t_negatives": 440,
+            "f_positives": 88,
+            "f_negatives": 434
+        },
+        "run_38": {
+            "n_packages": 2501,
+            "accuracy": 0.7868852459016393,
+            "detection_rate": 0.7830284552845529,
+            "false_alarm": 0.14428857715430862,
+            "t_positives": 1541,
+            "t_negatives": 427,
+            "f_positives": 72,
+            "f_negatives": 461
+        },
+        "run_39": {
+            "n_packages": 2501,
+            "accuracy": 0.7792882846861255,
+            "detection_rate": 0.7968188814776809,
+            "false_alarm": 0.15203426124197003,
+            "t_positives": 1553,
+            "t_negatives": 396,
+            "f_positives": 71,
+            "f_negatives": 481
+        },
+        "run_40": {
+            "n_packages": 2501,
+            "accuracy": 0.7944822071171531,
+            "detection_rate": 0.8062405636638148,
+            "false_alarm": 0.16666666666666666,
+            "t_positives": 1602,
+            "t_negatives": 385,
+            "f_positives": 77,
+            "f_negatives": 437
+        },
+        "run_41": {
+            "n_packages": 2501,
+            "accuracy": 0.8016793282686925,
+            "detection_rate": 0.7930174563591023,
+            "false_alarm": 0.15132924335378323,
+            "t_positives": 1590,
+            "t_negatives": 415,
+            "f_positives": 74,
+            "f_negatives": 422
+        },
+        "run_42": {
+            "n_packages": 2501,
+            "accuracy": 0.7976809276289484,
+            "detection_rate": 0.774937343358396,
+            "false_alarm": 0.11787819253438114,
+            "t_positives": 1546,
+            "t_negatives": 449,
+            "f_positives": 60,
+            "f_negatives": 446
+        },
+        "run_43": {
+            "n_packages": 2501,
+            "accuracy": 0.7840863654538185,
+            "detection_rate": 0.788883222845487,
+            "false_alarm": 0.14285714285714285,
+            "t_positives": 1547,
+            "t_negatives": 414,
+            "f_positives": 69,
+            "f_negatives": 471
+        },
+        "run_44": {
+            "n_packages": 2501,
+            "accuracy": 0.7804878048780488,
+            "detection_rate": 0.7873975409836066,
+            "false_alarm": 0.16666666666666666,
+            "t_positives": 1537,
+            "t_negatives": 415,
+            "f_positives": 83,
+            "f_negatives": 466
+        },
+        "run_45": {
+            "n_packages": 2501,
+            "accuracy": 0.8032786885245902,
+            "detection_rate": 0.7854654056744649,
+            "false_alarm": 0.13627254509018036,
+            "t_positives": 1578,
+            "t_negatives": 431,
+            "f_positives": 68,
+            "f_negatives": 424
+        },
+        "run_46": {
+            "n_packages": 2501,
+            "accuracy": 0.7896841263494602,
+            "detection_rate": 0.8091139240506329,
+            "false_alarm": 0.14512471655328799,
+            "t_positives": 1598,
+            "t_negatives": 377,
+            "f_positives": 64,
+            "f_negatives": 462
+        },
+        "run_47": {
+            "n_packages": 2501,
+            "accuracy": 0.797281087564974,
+            "detection_rate": 0.7963891675025075,
+            "false_alarm": 0.1488469601677149,
+            "t_positives": 1588,
+            "t_negatives": 406,
+            "f_positives": 71,
+            "f_negatives": 436
+        },
+        "run_48": {
+            "n_packages": 2501,
+            "accuracy": 0.8024790083966413,
+            "detection_rate": 0.8051818634778276,
+            "false_alarm": 0.18029350104821804,
+            "t_positives": 1616,
+            "t_negatives": 391,
+            "f_positives": 86,
+            "f_negatives": 408
+        },
+        "run_49": {
+            "n_packages": 2501,
+            "accuracy": 0.7964814074370252,
+            "detection_rate": 0.7836345381526104,
+            "false_alarm": 0.12753036437246965,
+            "t_positives": 1561,
+            "t_negatives": 431,
+            "f_positives": 63,
+            "f_negatives": 446
+        },
+        "run_50": {
+            "n_packages": 2501,
+            "accuracy": 0.7856857257097161,
+            "detection_rate": 0.7893129770992366,
+            "false_alarm": 0.15163934426229508,
+            "t_positives": 1551,
+            "t_negatives": 414,
+            "f_positives": 74,
+            "f_negatives": 462
+        },
+        "run_51": {
+            "n_packages": 2501,
+            "accuracy": 0.7916833266693323,
+            "detection_rate": 0.7853535353535354,
+            "false_alarm": 0.169921875,
+            "t_positives": 1555,
+            "t_negatives": 425,
+            "f_positives": 87,
+            "f_negatives": 434
+        },
+        "run_52": {
+            "n_packages": 2501,
+            "accuracy": 0.7968812475009996,
+            "detection_rate": 0.782237832413447,
+            "false_alarm": 0.1405940594059406,
+            "t_positives": 1559,
+            "t_negatives": 434,
+            "f_positives": 71,
+            "f_negatives": 437
+        },
+        "run_53": {
+            "n_packages": 2501,
+            "accuracy": 0.7976809276289484,
+            "detection_rate": 0.7889724310776942,
+            "false_alarm": 0.1494949494949495,
+            "t_positives": 1574,
+            "t_negatives": 421,
+            "f_positives": 74,
+            "f_negatives": 432
+        },
+        "run_54": {
+            "n_packages": 2501,
+            "accuracy": 0.7984806077568972,
+            "detection_rate": 0.7771657486229344,
+            "false_alarm": 0.13926499032882012,
+            "t_positives": 1552,
+            "t_negatives": 445,
+            "f_positives": 72,
+            "f_negatives": 432
+        },
+        "run_55": {
+            "n_packages": 2501,
+            "accuracy": 0.7960815673730508,
+            "detection_rate": 0.7930688096433953,
+            "false_alarm": 0.1487603305785124,
+            "t_positives": 1579,
+            "t_negatives": 412,
+            "f_positives": 72,
+            "f_negatives": 438
+        },
+        "run_56": {
+            "n_packages": 2501,
+            "accuracy": 0.7924830067972811,
+            "detection_rate": 0.7850655903128153,
+            "false_alarm": 0.1462925851703407,
+            "t_positives": 1556,
+            "t_negatives": 426,
+            "f_positives": 73,
+            "f_negatives": 446
+        },
+        "run_57": {
+            "n_packages": 2501,
+            "accuracy": 0.7960815673730508,
+            "detection_rate": 0.779507785032647,
+            "false_alarm": 0.14090019569471623,
+            "t_positives": 1552,
+            "t_negatives": 439,
+            "f_positives": 72,
+            "f_negatives": 438
+        },
+        "run_58": {
+            "n_packages": 2501,
+            "accuracy": 0.8064774090363854,
+            "detection_rate": 0.7843331680713932,
+            "false_alarm": 0.13346613545816732,
+            "t_positives": 1582,
+            "t_negatives": 435,
+            "f_positives": 67,
+            "f_negatives": 417
+        },
+        "run_59": {
+            "n_packages": 2501,
+            "accuracy": 0.7872850859656138,
+            "detection_rate": 0.7866937531742001,
+            "false_alarm": 0.16831683168316833,
+            "t_positives": 1549,
+            "t_negatives": 420,
+            "f_positives": 85,
+            "f_negatives": 447
+        },
+        "run_60": {
+            "n_packages": 2501,
+            "accuracy": 0.808876449420232,
+            "detection_rate": 0.7736035590706871,
+            "false_alarm": 0.14071294559099437,
+            "t_positives": 1565,
+            "t_negatives": 458,
+            "f_positives": 75,
+            "f_negatives": 403
+        },
+        "run_61": {
+            "n_packages": 2501,
+            "accuracy": 0.7804878048780488,
+            "detection_rate": 0.7868852459016393,
+            "false_alarm": 0.15447154471544716,
+            "t_positives": 1536,
+            "t_negatives": 416,
+            "f_positives": 76,
+            "f_negatives": 473
+        },
+        "run_62": {
+            "n_packages": 2501,
+            "accuracy": 0.7892842862854859,
+            "detection_rate": 0.7801418439716312,
+            "false_alarm": 0.16377649325626203,
+            "t_positives": 1540,
+            "t_negatives": 434,
+            "f_positives": 85,
+            "f_negatives": 442
+        },
+        "run_63": {
+            "n_packages": 2501,
+            "accuracy": 0.7948820471811275,
+            "detection_rate": 0.7907444668008048,
+            "false_alarm": 0.13692946058091288,
+            "t_positives": 1572,
+            "t_negatives": 416,
+            "f_positives": 66,
+            "f_negatives": 447
+        },
+        "run_64": {
+            "n_packages": 2501,
+            "accuracy": 0.7848860455817673,
+            "detection_rate": 0.8033622007131941,
+            "false_alarm": 0.16810344827586207,
+            "t_positives": 1577,
+            "t_negatives": 386,
+            "f_positives": 78,
+            "f_negatives": 460
+        },
+        "run_65": {
+            "n_packages": 2501,
+            "accuracy": 0.7984806077568972,
+            "detection_rate": 0.7916875312969455,
+            "false_alarm": 0.16966067864271456,
+            "t_positives": 1581,
+            "t_negatives": 416,
+            "f_positives": 85,
+            "f_negatives": 419
+        },
+        "run_66": {
+            "n_packages": 2501,
+            "accuracy": 0.7960815673730508,
+            "detection_rate": 0.7975891511803114,
+            "false_alarm": 0.15866388308977036,
+            "t_positives": 1588,
+            "t_negatives": 403,
+            "f_positives": 76,
+            "f_negatives": 434
+        },
+        "run_67": {
+            "n_packages": 2501,
+            "accuracy": 0.7888844462215114,
+            "detection_rate": 0.7856056766345666,
+            "false_alarm": 0.16895874263261296,
+            "t_positives": 1550,
+            "t_negatives": 423,
+            "f_positives": 86,
+            "f_negatives": 442
+        },
+        "run_68": {
+            "n_packages": 2501,
+            "accuracy": 0.788484606157537,
+            "detection_rate": 0.7956389452332657,
+            "false_alarm": 0.17418032786885246,
+            "t_positives": 1569,
+            "t_negatives": 403,
+            "f_positives": 85,
+            "f_negatives": 444
+        },
+        "run_69": {
+            "n_packages": 2501,
+            "accuracy": 0.7984806077568972,
+            "detection_rate": 0.7941912869303956,
+            "false_alarm": 0.15082644628099173,
+            "t_positives": 1586,
+            "t_negatives": 411,
+            "f_positives": 73,
+            "f_negatives": 431
+        },
+        "run_70": {
+            "n_packages": 2501,
+            "accuracy": 0.7880847660935626,
+            "detection_rate": 0.7808219178082192,
+            "false_alarm": 0.14455445544554454,
+            "t_positives": 1539,
+            "t_negatives": 432,
+            "f_positives": 73,
+            "f_negatives": 457
+        },
+        "run_71": {
+            "n_packages": 2501,
+            "accuracy": 0.7944822071171531,
+            "detection_rate": 0.7921489682939105,
+            "false_alarm": 0.15195071868583163,
+            "t_positives": 1574,
+            "t_negatives": 413,
+            "f_positives": 74,
+            "f_negatives": 440
+        },
+        "run_72": {
+            "n_packages": 2501,
+            "accuracy": 0.7888844462215114,
+            "detection_rate": 0.7911809427268119,
+            "false_alarm": 0.1643002028397566,
+            "t_positives": 1561,
+            "t_negatives": 412,
+            "f_positives": 81,
+            "f_negatives": 447
+        },
+        "run_73": {
+            "n_packages": 2501,
+            "accuracy": 0.7988804478208716,
+            "detection_rate": 0.7857857857857858,
+            "false_alarm": 0.12830957230142567,
+            "t_positives": 1570,
+            "t_negatives": 428,
+            "f_positives": 63,
+            "f_negatives": 440
+        },
+        "run_74": {
+            "n_packages": 2501,
+            "accuracy": 0.7980807676929228,
+            "detection_rate": 0.7980961923847696,
+            "false_alarm": 0.14072494669509594,
+            "t_positives": 1593,
+            "t_negatives": 403,
+            "f_positives": 66,
+            "f_negatives": 439
+        },
+        "run_75": {
+            "n_packages": 2501,
+            "accuracy": 0.7964814074370252,
+            "detection_rate": 0.7831325301204819,
+            "false_alarm": 0.1394422310756972,
+            "t_positives": 1560,
+            "t_negatives": 432,
+            "f_positives": 70,
+            "f_negatives": 439
+        },
+        "run_76": {
+            "n_packages": 2501,
+            "accuracy": 0.8012794882047181,
+            "detection_rate": 0.7979041916167665,
+            "false_alarm": 0.15625,
+            "t_positives": 1599,
+            "t_negatives": 405,
+            "f_positives": 75,
+            "f_negatives": 422
+        },
+        "run_77": {
+            "n_packages": 2501,
+            "accuracy": 0.8100759696121551,
+            "detection_rate": 0.7922013820335637,
+            "false_alarm": 0.1425661914460285,
+            "t_positives": 1605,
+            "t_negatives": 421,
+            "f_positives": 70,
+            "f_negatives": 405
+        },
+        "run_78": {
+            "n_packages": 2501,
+            "accuracy": 0.7908836465413834,
+            "detection_rate": 0.7977755308392316,
+            "false_alarm": 0.17184265010351968,
+            "t_positives": 1578,
+            "t_negatives": 400,
+            "f_positives": 83,
+            "f_negatives": 440
+        },
+        "run_79": {
+            "n_packages": 2501,
+            "accuracy": 0.7996801279488205,
+            "detection_rate": 0.7895,
+            "false_alarm": 0.15120967741935484,
+            "t_positives": 1579,
+            "t_negatives": 421,
+            "f_positives": 75,
+            "f_negatives": 426
+        },
+        "run_80": {
+            "n_packages": 2501,
+            "accuracy": 0.7992802878848461,
+            "detection_rate": 0.799399699849925,
+            "false_alarm": 0.13577586206896552,
+            "t_positives": 1598,
+            "t_negatives": 401,
+            "f_positives": 63,
+            "f_negatives": 439
+        },
+        "run_81": {
+            "n_packages": 2501,
+            "accuracy": 0.8004798080767693,
+            "detection_rate": 0.7757242757242757,
+            "false_alarm": 0.13152804642166344,
+            "t_positives": 1553,
+            "t_negatives": 449,
+            "f_positives": 68,
+            "f_negatives": 431
+        },
+        "run_82": {
+            "n_packages": 2501,
+            "accuracy": 0.8068772491003599,
+            "detection_rate": 0.7834489593657086,
+            "false_alarm": 0.1277445109780439,
+            "t_positives": 1581,
+            "t_negatives": 437,
+            "f_positives": 64,
+            "f_negatives": 419
+        },
+        "run_83": {
+            "n_packages": 2501,
+            "accuracy": 0.7988804478208716,
+            "detection_rate": 0.7992992992992993,
+            "false_alarm": 0.13948497854077252,
+            "t_positives": 1597,
+            "t_negatives": 401,
+            "f_positives": 65,
+            "f_negatives": 438
+        },
+        "run_84": {
+            "n_packages": 2501,
+            "accuracy": 0.8028788484606157,
+            "detection_rate": 0.796812749003984,
+            "false_alarm": 0.1206896551724138,
+            "t_positives": 1600,
+            "t_negatives": 408,
+            "f_positives": 56,
+            "f_negatives": 437
+        },
+        "run_85": {
+            "n_packages": 2501,
+            "accuracy": 0.7940823670531787,
+            "detection_rate": 0.783987915407855,
+            "false_alarm": 0.1402805611222445,
+            "t_positives": 1557,
+            "t_negatives": 429,
+            "f_positives": 70,
+            "f_negatives": 445
+        },
+        "run_86": {
+            "n_packages": 2501,
+            "accuracy": 0.79328268692523,
+            "detection_rate": 0.7842741935483871,
+            "false_alarm": 0.13184584178498987,
+            "t_positives": 1556,
+            "t_negatives": 428,
+            "f_positives": 65,
+            "f_negatives": 452
+        },
+        "run_87": {
+            "n_packages": 2501,
+            "accuracy": 0.8008796481407437,
+            "detection_rate": 0.7973040439340988,
+            "false_alarm": 0.15416666666666667,
+            "t_positives": 1597,
+            "t_negatives": 406,
+            "f_positives": 74,
+            "f_negatives": 424
+        },
+        "run_88": {
+            "n_packages": 2501,
+            "accuracy": 0.7984806077568972,
+            "detection_rate": 0.7866800200300451,
+            "false_alarm": 0.1497005988023952,
+            "t_positives": 1571,
+            "t_negatives": 426,
+            "f_positives": 75,
+            "f_negatives": 429
+        },
+        "run_89": {
+            "n_packages": 2501,
+            "accuracy": 0.8012794882047181,
+            "detection_rate": 0.7829341317365269,
+            "false_alarm": 0.150390625,
+            "t_positives": 1569,
+            "t_negatives": 435,
+            "f_positives": 77,
+            "f_negatives": 420
+        },
+        "run_90": {
+            "n_packages": 2501,
+            "accuracy": 0.7900839664134346,
+            "detection_rate": 0.777834008097166,
+            "false_alarm": 0.14757281553398058,
+            "t_positives": 1537,
+            "t_negatives": 439,
+            "f_positives": 76,
+            "f_negatives": 449
+        },
+        "run_91": {
+            "n_packages": 2501,
+            "accuracy": 0.7896841263494602,
+            "detection_rate": 0.790379746835443,
+            "false_alarm": 0.16024340770791076,
+            "t_positives": 1561,
+            "t_negatives": 414,
+            "f_positives": 79,
+            "f_negatives": 447
+        },
+        "run_92": {
+            "n_packages": 2501,
+            "accuracy": 0.8048780487804879,
+            "detection_rate": 0.784401390958768,
+            "false_alarm": 0.1285140562248996,
+            "t_positives": 1579,
+            "t_negatives": 434,
+            "f_positives": 64,
+            "f_negatives": 424
+        },
+        "run_93": {
+            "n_packages": 2501,
+            "accuracy": 0.7828868452618952,
+            "detection_rate": 0.7936670071501533,
+            "false_alarm": 0.15126050420168066,
+            "t_positives": 1554,
+            "t_negatives": 404,
+            "f_positives": 72,
+            "f_negatives": 471
+        },
+        "run_94": {
+            "n_packages": 2501,
+            "accuracy": 0.7860855657736905,
+            "detection_rate": 0.7848423194303153,
+            "false_alarm": 0.1384928716904277,
+            "t_positives": 1543,
+            "t_negatives": 423,
+            "f_positives": 68,
+            "f_negatives": 467
+        },
+        "run_95": {
+            "n_packages": 2501,
+            "accuracy": 0.7924830067972811,
+            "detection_rate": 0.7744702320887992,
+            "false_alarm": 0.1534090909090909,
+            "t_positives": 1535,
+            "t_negatives": 447,
+            "f_positives": 81,
+            "f_negatives": 438
+        },
+        "run_96": {
+            "n_packages": 2501,
+            "accuracy": 0.8016793282686925,
+            "detection_rate": 0.7815461346633417,
+            "false_alarm": 0.14785992217898833,
+            "t_positives": 1567,
+            "t_negatives": 438,
+            "f_positives": 76,
+            "f_negatives": 420
+        },
+        "run_97": {
+            "n_packages": 2501,
+            "accuracy": 0.7984806077568972,
+            "detection_rate": 0.7916875312969455,
+            "false_alarm": 0.1440329218106996,
+            "t_positives": 1581,
+            "t_negatives": 416,
+            "f_positives": 70,
+            "f_negatives": 434
+        },
+        "run_98": {
+            "n_packages": 2501,
+            "accuracy": 0.8100759696121551,
+            "detection_rate": 0.7897334649555775,
+            "false_alarm": 0.1393939393939394,
+            "t_positives": 1600,
+            "t_negatives": 426,
+            "f_positives": 69,
+            "f_negatives": 406
+        },
+        "run_99": {
+            "n_packages": 2501,
+            "accuracy": 0.7992802878848461,
+            "detection_rate": 0.7933966983491746,
+            "false_alarm": 0.11373390557939914,
+            "t_positives": 1586,
+            "t_negatives": 413,
+            "f_positives": 53,
+            "f_negatives": 449
+        },
+        "run_100": {
+            "n_packages": 2501,
+            "accuracy": 0.790483806477409,
+            "detection_rate": 0.8002023267577137,
+            "false_alarm": 0.15236051502145923,
+            "t_positives": 1582,
+            "t_negatives": 395,
+            "f_positives": 71,
+            "f_negatives": 453
+        }
+    }
+}
